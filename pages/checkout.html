@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commande — SkynetStore</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container header-inner">
+            <a href="../index.html" class="logo"><span class="logo-icon">⬡</span> SkynetStore</a>
+            <nav class="nav" id="nav">
+                <a href="../index.html" class="nav-link">Accueil</a>
+                <a href="catalog.html" class="nav-link">Catalogue</a>
+            </nav>
+            <div class="header-actions">
+                <button class="cart-btn" id="cart-btn" aria-label="Panier">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="checkout section">
+        <div class="container">
+            <h1 class="page-title">Finaliser la Commande</h1>
+            <div class="checkout-grid">
+                <!-- Checkout Form -->
+                <div class="checkout-form-wrapper">
+                    <form id="checkout-form" class="checkout-form">
+                        <!-- Shipping Info -->
+                        <div class="checkout-section">
+                            <h3>Informations de Livraison</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="first-name">Prénom</label>
+                                    <input type="text" id="first-name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="last-name">Nom</label>
+                                    <input type="text" id="last-name" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Téléphone</label>
+                                <input type="tel" id="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Adresse</label>
+                                <input type="text" id="address" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="city">Ville</label>
+                                    <input type="text" id="city" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="postal">Code Postal</label>
+                                    <input type="text" id="postal" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Pays</label>
+                                <select id="country" required>
+                                    <option value="FR">France</option>
+                                    <option value="BE">Belgique</option>
+                                    <option value="CH">Suisse</option>
+                                    <option value="LU">Luxembourg</option>
+                                    <option value="CA">Canada</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Payment -->
+                        <div class="checkout-section">
+                            <h3>Paiement</h3>
+                            <div class="payment-methods">
+                                <label class="payment-option active">
+                                    <input type="radio" name="payment" value="card" checked>
+                                    <span>💳 Carte Bancaire</span>
+                                </label>
+                                <label class="payment-option">
+                                    <input type="radio" name="payment" value="paypal">
+                                    <span>🅿️ PayPal</span>
+                                </label>
+                                <label class="payment-option">
+                                    <input type="radio" name="payment" value="applepay">
+                                    <span>🍎 Apple Pay</span>
+                                </label>
+                            </div>
+                            <div id="card-fields">
+                                <div class="form-group">
+                                    <label for="card-number">Numéro de Carte</label>
+                                    <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="card-expiry">Expiration</label>
+                                        <input type="text" id="card-expiry" placeholder="MM/AA" maxlength="5">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="card-cvc">CVC</label>
+                                        <input type="text" id="card-cvc" placeholder="123" maxlength="3">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block btn-lg">Confirmer la Commande</button>
+                    </form>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="order-summary">
+                    <h3>Résumé de la Commande</h3>
+                    <div class="order-items" id="order-items">
+                        <!-- Filled by JS -->
+                    </div>
+                    <div class="order-totals">
+                        <div class="order-line">
+                            <span>Sous-total</span>
+                            <span id="order-subtotal">0,00 €</span>
+                        </div>
+                        <div class="order-line">
+                            <span>Livraison</span>
+                            <span id="order-shipping">Gratuite</span>
+                        </div>
+                        <div class="order-line order-total">
+                            <span>Total</span>
+                            <span id="order-total">0,00 €</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="success-modal" style="display:none;">
+        <div class="modal">
+            <div class="modal-icon">✅</div>
+            <h2>Commande Confirmée !</h2>
+            <p>Merci pour votre commande. Vous recevrez un email de confirmation avec les détails de suivi.</p>
+            <p class="order-number">Commande N° <strong id="order-number"></strong></p>
+            <a href="../index.html" class="btn btn-primary">Retour à l'accueil</a>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <aside class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Votre Panier</h3>
+            <button class="cart-close" id="cart-close">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <p class="cart-empty">Votre panier est vide</p>
+        </div>
+        <div class="cart-footer" id="cart-footer" style="display:none;">
+            <div class="cart-total">
+                <span>Total :</span>
+                <span id="cart-total-price">0,00 €</span>
+            </div>
+            <a href="checkout.html" class="btn btn-primary btn-block">Commander</a>
+        </div>
+    </aside>
+
+    <footer class="footer">
+        <div class="container footer-bottom">
+            <p>&copy; 2026 SkynetStore. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="../js/products.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/checkout.js"></script>
+    <script src="../js/app.js"></script>
+</body>
+</html>

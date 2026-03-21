@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkynetStore — Produits Électroniques IA</title>
+    <meta name="description" content="SkynetStore : votre boutique de produits électroniques et gadgets IA. Enceintes intelligentes, robots, drones, wearables et plus encore.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header / Navigation -->
+    <header class="header" id="header">
+        <div class="container header-inner">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">⬡</span> SkynetStore
+            </a>
+            <nav class="nav" id="nav">
+                <a href="index.html" class="nav-link active">Accueil</a>
+                <a href="pages/catalog.html" class="nav-link">Catalogue</a>
+                <a href="#featured" class="nav-link">Populaires</a>
+                <a href="#about" class="nav-link">À propos</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </nav>
+            <div class="header-actions">
+                <button class="cart-btn" id="cart-btn" aria-label="Panier">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg-grid"></div>
+        <div class="container hero-content">
+            <span class="hero-badge">🚀 Nouvelle Collection IA 2026</span>
+            <h1 class="hero-title">Le Futur est <span class="gradient-text">Intelligent</span></h1>
+            <p class="hero-subtitle">Découvrez notre sélection de produits électroniques propulsés par l'Intelligence Artificielle. Des gadgets qui pensent, apprennent et s'adaptent à vous.</p>
+            <div class="hero-cta">
+                <a href="pages/catalog.html" class="btn btn-primary">Explorer le Catalogue</a>
+                <a href="#featured" class="btn btn-outline">Voir les Best-sellers</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Produits IA</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">15K+</span>
+                    <span class="stat-label">Clients Satisfaits</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Support IA</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories section" id="categories">
+        <div class="container">
+            <h2 class="section-title">Nos Catégories</h2>
+            <p class="section-subtitle">Trouvez le gadget IA parfait pour chaque besoin</p>
+            <div class="categories-grid">
+                <a href="pages/catalog.html?cat=enceintes" class="category-card">
+                    <div class="category-icon">🔊</div>
+                    <h3>Enceintes IA</h3>
+                    <p>Assistants vocaux & enceintes intelligentes</p>
+                </a>
+                <a href="pages/catalog.html?cat=robots" class="category-card">
+                    <div class="category-icon">🤖</div>
+                    <h3>Robots & Drones</h3>
+                    <p>Robots compagnons & drones autonomes</p>
+                </a>
+                <a href="pages/catalog.html?cat=wearables" class="category-card">
+                    <div class="category-icon">⌚</div>
+                    <h3>Wearables IA</h3>
+                    <p>Montres, lunettes & accessoires connectés</p>
+                </a>
+                <a href="pages/catalog.html?cat=maison" class="category-card">
+                    <div class="category-icon">🏠</div>
+                    <h3>Maison Connectée</h3>
+                    <p>Caméras, capteurs & domotique IA</p>
+                </a>
+                <a href="pages/catalog.html?cat=audio" class="category-card">
+                    <div class="category-icon">🎧</div>
+                    <h3>Audio IA</h3>
+                    <p>Écouteurs & casques avec IA intégrée</p>
+                </a>
+                <a href="pages/catalog.html?cat=gadgets" class="category-card">
+                    <div class="category-icon">💡</div>
+                    <h3>Gadgets IA</h3>
+                    <p>Traducteurs, scanners & accessoires tech</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured section" id="featured">
+        <div class="container">
+            <h2 class="section-title">Produits Populaires</h2>
+            <p class="section-subtitle">Les best-sellers choisis par notre communauté</p>
+            <div class="products-grid" id="featured-products">
+                <!-- Filled by JS -->
+            </div>
+            <div class="section-cta">
+                <a href="pages/catalog.html" class="btn btn-primary">Voir tout le catalogue →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Us / Features -->
+    <section class="features section" id="about">
+        <div class="container">
+            <h2 class="section-title">Pourquoi SkynetStore ?</h2>
+            <p class="section-subtitle">Votre partenaire tech de confiance</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚚</div>
+                    <h3>Livraison Rapide</h3>
+                    <p>Livraison gratuite à partir de 50€. Expédition en 24-48h dans toute l'Europe.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Paiement Sécurisé</h3>
+                    <p>Transactions 100% sécurisées. CB, PayPal, Apple Pay & crypto acceptés.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Retours 30 Jours</h3>
+                    <p>Pas satisfait ? Retournez votre produit sous 30 jours, sans questions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>Support IA 24/7</h3>
+                    <p>Notre assistant IA répond à vos questions instantanément, jour et nuit.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter section">
+        <div class="container">
+            <div class="newsletter-inner">
+                <h2>Restez Connecté au Futur</h2>
+                <p>Recevez nos offres exclusives et les dernières nouveautés IA directement dans votre boîte mail.</p>
+                <form class="newsletter-form" id="newsletter-form">
+                    <input type="email" placeholder="votre@email.com" required>
+                    <button type="submit" class="btn btn-primary">S'abonner</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact section" id="contact">
+        <div class="container">
+            <h2 class="section-title">Contactez-nous</h2>
+            <p class="section-subtitle">Une question ? Notre équipe est là pour vous.</p>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <span>📧</span>
+                        <div>
+                            <strong>Email</strong>
+                            <p>support@skynetstore.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <span>📱</span>
+                        <div>
+                            <strong>Téléphone</strong>
+                            <p>+33 1 23 45 67 89</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <span>📍</span>
+                        <div>
+                            <strong>Adresse</strong>
+                            <p>42 Rue de l'Innovation, 75001 Paris</p>
+                        </div>
+                    </div>
+                </div>
+                <form class="contact-form" id="contact-form">
+                    <input type="text" placeholder="Votre nom" required>
+                    <input type="email" placeholder="Votre email" required>
+                    <textarea placeholder="Votre message..." rows="5" required></textarea>
+                    <button type="submit" class="btn btn-primary">Envoyer</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo"><span class="logo-icon">⬡</span> SkynetStore</a>
+                    <p>Le QG des geeks qui refusent de rester en version bêta. Produits IA, gadgets high-tech — tout pour prendre le contrôle de ta vie numérique.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Navigation</h4>
+                    <a href="index.html">Accueil</a>
+                    <a href="pages/catalog.html">Catalogue</a>
+                    <a href="#about">À propos</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Catégories</h4>
+                    <a href="pages/catalog.html?cat=enceintes">Enceintes IA</a>
+                    <a href="pages/catalog.html?cat=robots">Robots & Drones</a>
+                    <a href="pages/catalog.html?cat=wearables">Wearables IA</a>
+                    <a href="pages/catalog.html?cat=maison">Maison Connectée</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Informations</h4>
+                    <a href="#">Conditions Générales</a>
+                    <a href="#">Politique de Confidentialité</a>
+                    <a href="#">Livraison & Retours</a>
+                    <a href="#">FAQ</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SkynetStore. Tous droits réservés. Le futur n'attend pas. Toi non plus.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <aside class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Votre Panier</h3>
+            <button class="cart-close" id="cart-close">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <p class="cart-empty">Votre panier est vide</p>
+        </div>
+        <div class="cart-footer" id="cart-footer" style="display:none;">
+            <div class="cart-total">
+                <span>Total :</span>
+                <span id="cart-total-price">0,00 €</span>
+            </div>
+            <a href="pages/checkout.html" class="btn btn-primary btn-block">Commander</a>
+        </div>
+    </aside>
+
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
