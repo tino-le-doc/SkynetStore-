@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Compte — SkynetStore</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container header-inner">
+            <a href="../index.html" class="logo"><span class="logo-icon">⬡</span> SkynetStore</a>
+            <nav class="nav" id="nav">
+                <a href="../index.html" class="nav-link">Accueil</a>
+                <a href="catalog.html" class="nav-link">Catalogue</a>
+                <a href="../index.html#featured" class="nav-link">Populaires</a>
+                <a href="../index.html#about" class="nav-link">À propos</a>
+                <a href="../index.html#contact" class="nav-link">Contact</a>
+            </nav>
+            <div class="header-actions">
+                <a href="account.html" class="nav-link account-link" id="account-link">Mon Compte</a>
+                <button class="cart-btn" id="cart-btn" aria-label="Panier">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="account-page section">
+        <div class="container">
+            <div class="account-header">
+                <h1 class="page-title">Mon Compte</h1>
+                <button class="btn btn-outline" id="logout-btn">Se déconnecter</button>
+            </div>
+
+            <div class="account-grid">
+                <!-- Profile Card -->
+                <div class="account-card">
+                    <h3>Informations Personnelles</h3>
+                    <form id="profile-form">
+                        <div class="auth-message" id="profile-message"></div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="profile-firstname">Prénom</label>
+                                <input type="text" id="profile-firstname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-lastname">Nom</label>
+                                <input type="text" id="profile-lastname" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-email">Email</label>
+                            <input type="email" id="profile-email" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-phone">Téléphone</label>
+                            <input type="tel" id="profile-phone" placeholder="+33 6 12 34 56 78">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </form>
+                </div>
+
+                <!-- Address Card -->
+                <div class="account-card">
+                    <h3>Adresse de Livraison</h3>
+                    <form id="address-form">
+                        <div class="auth-message" id="address-message"></div>
+                        <div class="form-group">
+                            <label for="profile-address">Adresse</label>
+                            <input type="text" id="profile-address" placeholder="Rue, numéro...">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="profile-city">Ville</label>
+                                <input type="text" id="profile-city" placeholder="Votre ville">
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-postal">Code Postal</label>
+                                <input type="text" id="profile-postal" placeholder="75001">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-country">Pays</label>
+                            <select id="profile-country">
+                                <option value="FR">France</option>
+                                <option value="BE">Belgique</option>
+                                <option value="CH">Suisse</option>
+                                <option value="LU">Luxembourg</option>
+                                <option value="CA">Canada</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enregistrer l'adresse</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Account Info -->
+            <div class="account-card account-meta">
+                <p>Membre depuis : <strong id="member-since"></strong></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <aside class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Votre Panier</h3>
+            <button class="cart-close" id="cart-close">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <p class="cart-empty">Votre panier est vide</p>
+        </div>
+        <div class="cart-footer" id="cart-footer" style="display:none;">
+            <div class="cart-total">
+                <span>Total :</span>
+                <span id="cart-total-price">0,00 €</span>
+            </div>
+            <a href="checkout.html" class="btn btn-primary btn-block">Commander</a>
+        </div>
+    </aside>
+
+    <footer class="footer">
+        <div class="container footer-bottom">
+            <p>&copy; 2026 SkynetStore. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="../js/products.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/app.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const user = Auth.getCurrentUser();
+        if (!user) {
+            window.location.href = 'account.html';
+            return;
+        }
+
+        // Fill profile form
+        document.getElementById('profile-firstname').value = user.firstName;
+        document.getElementById('profile-lastname').value = user.lastName;
+        document.getElementById('profile-email').value = user.email;
+        document.getElementById('profile-phone').value = user.phone || '';
+
+        // Fill address form
+        document.getElementById('profile-address').value = user.address || '';
+        document.getElementById('profile-city').value = user.city || '';
+        document.getElementById('profile-postal').value = user.postal || '';
+        document.getElementById('profile-country').value = user.country || 'FR';
+
+        // Member since
+        const date = new Date(user.createdAt);
+        document.getElementById('member-since').textContent = date.toLocaleDateString('fr-FR', {
+            day: 'numeric', month: 'long', year: 'numeric'
+        });
+
+        // Profile form
+        document.getElementById('profile-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const result = Auth.updateProfile({
+                firstName: document.getElementById('profile-firstname').value,
+                lastName: document.getElementById('profile-lastname').value,
+                phone: document.getElementById('profile-phone').value
+            });
+            const msg = document.getElementById('profile-message');
+            if (result.ok) {
+                msg.textContent = 'Profil mis à jour !';
+                msg.className = 'auth-message success';
+            } else {
+                msg.textContent = result.error;
+                msg.className = 'auth-message error';
+            }
+        });
+
+        // Address form
+        document.getElementById('address-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const result = Auth.updateProfile({
+                address: document.getElementById('profile-address').value,
+                city: document.getElementById('profile-city').value,
+                postal: document.getElementById('profile-postal').value,
+                country: document.getElementById('profile-country').value
+            });
+            const msg = document.getElementById('address-message');
+            if (result.ok) {
+                msg.textContent = 'Adresse mise à jour !';
+                msg.className = 'auth-message success';
+            } else {
+                msg.textContent = result.error;
+                msg.className = 'auth-message error';
+            }
+        });
+
+        // Logout
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            Auth.logout();
+            window.location.href = 'account.html';
+        });
+    });
+    </script>
+</body>
+</html>

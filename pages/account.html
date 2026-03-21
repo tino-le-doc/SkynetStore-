@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion / Inscription — SkynetStore</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container header-inner">
+            <a href="../index.html" class="logo"><span class="logo-icon">⬡</span> SkynetStore</a>
+            <nav class="nav" id="nav">
+                <a href="../index.html" class="nav-link">Accueil</a>
+                <a href="catalog.html" class="nav-link">Catalogue</a>
+                <a href="../index.html#featured" class="nav-link">Populaires</a>
+                <a href="../index.html#about" class="nav-link">À propos</a>
+                <a href="../index.html#contact" class="nav-link">Contact</a>
+            </nav>
+            <div class="header-actions">
+                <a href="account.html" class="nav-link account-link" id="account-link">Mon Compte</a>
+                <button class="cart-btn" id="cart-btn" aria-label="Panier">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="auth-page section">
+        <div class="container">
+            <div class="auth-container">
+                <!-- Tab Switcher -->
+                <div class="auth-tabs">
+                    <button class="auth-tab active" data-tab="login">Connexion</button>
+                    <button class="auth-tab" data-tab="register">Inscription</button>
+                </div>
+
+                <!-- Login Form -->
+                <form class="auth-form" id="login-form">
+                    <h2>Content de vous revoir</h2>
+                    <p class="auth-subtitle">Connectez-vous à votre compte SkynetStore</p>
+                    <div class="auth-message" id="login-message"></div>
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" required placeholder="votre@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Mot de passe</label>
+                        <input type="password" id="login-password" required placeholder="Votre mot de passe" minlength="6">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block btn-lg">Se connecter</button>
+                    <p class="auth-switch">Pas encore de compte ? <a href="#" id="go-register">Créer un compte</a></p>
+                </form>
+
+                <!-- Register Form -->
+                <form class="auth-form" id="register-form" style="display:none;">
+                    <h2>Créer votre compte</h2>
+                    <p class="auth-subtitle">Rejoignez la communauté SkynetStore — aucun achat requis</p>
+                    <div class="auth-message" id="register-message"></div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="reg-firstname">Prénom *</label>
+                            <input type="text" id="reg-firstname" required placeholder="Votre prénom">
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-lastname">Nom *</label>
+                            <input type="text" id="reg-lastname" required placeholder="Votre nom">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">Email *</label>
+                        <input type="email" id="reg-email" required placeholder="votre@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Mot de passe *</label>
+                        <input type="password" id="reg-password" required placeholder="Minimum 6 caractères" minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password2">Confirmer le mot de passe *</label>
+                        <input type="password" id="reg-password2" required placeholder="Confirmez votre mot de passe" minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-phone">Téléphone (optionnel)</label>
+                        <input type="tel" id="reg-phone" placeholder="+33 6 12 34 56 78">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block btn-lg">Créer mon compte</button>
+                    <p class="auth-switch">Déjà un compte ? <a href="#" id="go-login">Se connecter</a></p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <aside class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Votre Panier</h3>
+            <button class="cart-close" id="cart-close">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <p class="cart-empty">Votre panier est vide</p>
+        </div>
+        <div class="cart-footer" id="cart-footer" style="display:none;">
+            <div class="cart-total">
+                <span>Total :</span>
+                <span id="cart-total-price">0,00 €</span>
+            </div>
+            <a href="checkout.html" class="btn btn-primary btn-block">Commander</a>
+        </div>
+    </aside>
+
+    <footer class="footer">
+        <div class="container footer-bottom">
+            <p>&copy; 2026 SkynetStore. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="../js/products.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/app.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Redirect if already logged in
+        if (Auth.isLoggedIn()) {
+            window.location.href = 'mon-compte.html';
+            return;
+        }
+
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const tabs = document.querySelectorAll('.auth-tab');
+
+        function switchTab(tab) {
+            tabs.forEach(t => t.classList.remove('active'));
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+            if (tab === 'login') {
+                loginForm.style.display = '';
+                registerForm.style.display = 'none';
+            } else {
+                loginForm.style.display = 'none';
+                registerForm.style.display = '';
+            }
+        }
+
+        tabs.forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+        document.getElementById('go-register').addEventListener('click', e => { e.preventDefault(); switchTab('register'); });
+        document.getElementById('go-login').addEventListener('click', e => { e.preventDefault(); switchTab('login'); });
+
+        // Login
+        loginForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const msg = document.getElementById('login-message');
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const result = Auth.login(email, password);
+            if (result.ok) {
+                window.location.href = 'mon-compte.html';
+            } else {
+                msg.textContent = result.error;
+                msg.className = 'auth-message error';
+            }
+        });
+
+        // Register
+        registerForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const msg = document.getElementById('register-message');
+            const password = document.getElementById('reg-password').value;
+            const password2 = document.getElementById('reg-password2').value;
+            if (password !== password2) {
+                msg.textContent = 'Les mots de passe ne correspondent pas.';
+                msg.className = 'auth-message error';
+                return;
+            }
+            const result = Auth.register({
+                firstName: document.getElementById('reg-firstname').value,
+                lastName: document.getElementById('reg-lastname').value,
+                email: document.getElementById('reg-email').value,
+                password: password,
+                phone: document.getElementById('reg-phone').value
+            });
+            if (result.ok) {
+                window.location.href = 'mon-compte.html';
+            } else {
+                msg.textContent = result.error;
+                msg.className = 'auth-message error';
+            }
+        });
+
+        // Check URL hash for tab
+        if (window.location.hash === '#register') switchTab('register');
+    });
+    </script>
+</body>
+</html>
