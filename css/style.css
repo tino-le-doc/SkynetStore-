@@ -7,9 +7,9 @@
     --bg-secondary: #12121a;
     --bg-card: #1a1a2e;
     --bg-card-hover: #222240;
-    --accent: #6c63ff;
-    --accent-light: #8b83ff;
-    --accent-glow: rgba(108, 99, 255, 0.3);
+    --accent: #ff6b00;
+    --accent-light: #ff8c33;
+    --accent-glow: rgba(255, 107, 0, 0.3);
     --cyan: #00d4ff;
     --green: #00e676;
     --pink: #ff6b9d;
@@ -22,7 +22,7 @@
     --radius-sm: 8px;
     --radius-lg: 20px;
     --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-    --shadow-glow: 0 0 30px rgba(108, 99, 255, 0.15);
+    --shadow-glow: 0 0 30px rgba(255, 107, 0, 0.15);
     --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
