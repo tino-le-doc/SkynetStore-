@@ -14,7 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fill page
     document.title = product.name + ' — SkynetStore';
     document.getElementById('breadcrumb-product').textContent = product.name;
-    document.getElementById('product-image').innerHTML = `<span style="font-size:6rem">${product.emoji}</span>`;
+    document.getElementById('product-image').innerHTML = product.image
+        ? `<img src="${product.image}" alt="${product.name}" style="max-width:100%;max-height:300px;object-fit:contain;">`
+        : `<span style="font-size:6rem">${product.emoji}</span>`;
     document.getElementById('product-category').textContent = product.categoryLabel;
     document.getElementById('product-name').textContent = product.name;
     document.getElementById('product-rating').innerHTML = generateStars(product.rating) + ` · ${product.reviews} avis`;

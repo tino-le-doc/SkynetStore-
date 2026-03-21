@@ -1,13 +1,35 @@
 /**
  * SkynetStore — Authentication & Account Management
- * Gestion des comptes clients (localStorage)
+ * Gestion des comptes clients et administrateur (localStorage)
  */
 const Auth = (() => {
     const STORAGE_KEY = 'skynet-users';
     const SESSION_KEY = 'skynet-session';
 
+    // Default admin account
+    const ADMIN_ACCOUNT = {
+        id: 1,
+        firstName: 'Admin',
+        lastName: 'SkynetStore',
+        email: 'admin@skynetstore.com',
+        password: 'admin123',
+        phone: '',
+        address: '',
+        city: '',
+        postal: '',
+        country: 'FR',
+        role: 'admin',
+        createdAt: '2026-01-01T00:00:00.000Z'
+    };
+
     function getUsers() {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        const users = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        // Ensure admin account always exists
+        if (!users.find(u => u.email === ADMIN_ACCOUNT.email)) {
+            users.unshift({ ...ADMIN_ACCOUNT });
+            saveUsers(users);
+        }
+        return users;
     }
 
     function saveUsers(users) {
@@ -38,6 +60,7 @@ const Auth = (() => {
             city: data.city || '',
             postal: data.postal || '',
             country: data.country || 'FR',
+            role: 'customer',
             createdAt: new Date().toISOString()
         };
         users.push(user);
@@ -68,6 +91,11 @@ const Auth = (() => {
         return getSession();
     }
 
+    function isAdmin() {
+        const user = getSession();
+        return user && user.role === 'admin';
+    }
+
     function updateProfile(data) {
         const session = getSession();
         if (!session) return { ok: false, error: 'Non connecté.' };
@@ -89,20 +117,33 @@ const Auth = (() => {
         return getSession() !== null;
     }
 
-    return { register, login, logout, getCurrentUser, updateProfile, isLoggedIn };
+    return { register, login, logout, getCurrentUser, updateProfile, isLoggedIn, isAdmin };
 })();
 
-// Update account link in header
+// Update account link in header + show admin link if admin
 document.addEventListener('DOMContentLoaded', () => {
     const accountLink = document.getElementById('account-link');
     if (accountLink) {
         const user = Auth.getCurrentUser();
         if (user) {
-            const isInPages = accountLink.closest('header') &&
-                window.location.pathname.includes('/pages/');
-            accountLink.href = isInPages ? 'mon-compte.html' : 'pages/mon-compte.html';
+            const isInPages = window.location.pathname.includes('/pages/');
+            const isInProducts = window.location.pathname.includes('/pages/products/');
+            accountLink.href = isInProducts ? '../mon-compte.html' : (isInPages ? 'mon-compte.html' : 'pages/mon-compte.html');
             accountLink.textContent = user.firstName;
             accountLink.title = 'Mon Compte';
+
+            // Add admin link in nav if user is admin
+            if (user.role === 'admin') {
+                const nav = document.getElementById('nav');
+                if (nav) {
+                    const adminLink = document.createElement('a');
+                    adminLink.className = 'nav-link';
+                    adminLink.style.color = 'var(--accent)';
+                    adminLink.textContent = 'Admin';
+                    adminLink.href = isInProducts ? '../admin.html' : (isInPages ? 'admin.html' : 'pages/admin.html');
+                    nav.appendChild(adminLink);
+                }
+            }
         }
     }
 });

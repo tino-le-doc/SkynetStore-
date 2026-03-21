@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration — SkynetStore</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container header-inner">
+            <a href="../index.html" class="logo"><span class="logo-icon">⬡</span> SkynetStore</a>
+            <nav class="nav" id="nav">
+                <a href="../index.html" class="nav-link">Accueil</a>
+                <a href="catalog.html" class="nav-link">Catalogue</a>
+                <a href="admin.html" class="nav-link" style="color:var(--accent);">Admin</a>
+            </nav>
+            <div class="header-actions">
+                <a href="#" class="nav-link account-link" id="admin-user-name">Admin</a>
+                <button class="btn btn-sm" id="admin-logout-btn" style="background:var(--border);color:var(--text-primary);padding:6px 16px;font-size:0.85rem;border-radius:var(--radius-sm);">Déconnexion</button>
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Dashboard -->
+    <section class="section" style="padding-top:120px;">
+        <div class="container">
+            <div class="admin-header">
+                <div>
+                    <h1 class="section-title" style="text-align:left;margin-bottom:8px;">Gestion des Produits</h1>
+                    <p style="color:var(--text-secondary);">Ajoutez, modifiez ou supprimez vos produits</p>
+                </div>
+                <button class="btn btn-primary" id="add-product-btn">+ Nouveau Produit</button>
+            </div>
+
+            <!-- Product List Table -->
+            <div class="admin-table-wrapper">
+                <table class="admin-table" id="admin-products-table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Nom</th>
+                            <th>Catégorie</th>
+                            <th>Prix</th>
+                            <th>Ancien Prix</th>
+                            <th>Populaire</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-products-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Edit Modal -->
+    <div class="modal-overlay" id="product-modal" style="display:none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modal-title">Modifier le Produit</h2>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <form id="product-form" class="modal-body">
+                <input type="hidden" id="edit-id">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-name">Nom du produit</label>
+                        <input type="text" id="edit-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-slug">Slug (URL)</label>
+                        <input type="text" id="edit-slug" required placeholder="mon-produit">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-category">Catégorie</label>
+                        <select id="edit-category" required>
+                            <option value="enceintes">Enceintes IA</option>
+                            <option value="wearables">Wearables IA</option>
+                            <option value="maison">Maison Connectée</option>
+                            <option value="robots">Robots & Drones</option>
+                            <option value="audio">Audio IA</option>
+                            <option value="gadgets">Gadgets IA</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-emoji">Emoji</label>
+                        <input type="text" id="edit-emoji" placeholder="🔊">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-image">URL de l'image (optionnel, remplace l'emoji)</label>
+                    <input type="url" id="edit-image" placeholder="https://exemple.com/image.jpg">
+                    <div id="image-preview" class="image-preview"></div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-price">Prix (€)</label>
+                        <input type="number" id="edit-price" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-old-price">Ancien prix (€, laisser vide si pas de promo)</label>
+                        <input type="number" id="edit-old-price" step="0.01" min="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-description">Description complète</label>
+                    <textarea id="edit-description" rows="4" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-features">Caractéristiques (une par ligne)</label>
+                    <textarea id="edit-features" rows="5" placeholder="Caractéristique 1&#10;Caractéristique 2&#10;Caractéristique 3"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-rating">Note (1-5)</label>
+                        <input type="number" id="edit-rating" step="0.1" min="1" max="5" value="4.5">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-reviews">Nombre d'avis</label>
+                        <input type="number" id="edit-reviews" min="0" value="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="edit-popular"> Produit populaire (affiché en page d'accueil)
+                    </label>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="modal-cancel">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="delete-modal" style="display:none;">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h2>Supprimer le produit</h2>
+                <button class="modal-close" id="delete-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="color:var(--text-secondary);margin-bottom:24px;">Êtes-vous sûr de vouloir supprimer <strong id="delete-product-name"></strong> ? Cette action est irréversible.</p>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" id="delete-cancel">Annuler</button>
+                    <button class="btn btn-danger" id="delete-confirm">Supprimer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container footer-bottom">
+            <p>&copy; 2026 SkynetStore. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="../js/products.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/admin.js"></script>
+</body>
+</html>

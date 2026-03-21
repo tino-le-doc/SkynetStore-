@@ -1,7 +1,8 @@
 /**
  * SkynetStore — Product Database
+ * Products can be edited by admin via localStorage
  */
-const PRODUCTS = [
+const DEFAULT_PRODUCTS = [
     {
         id: 1,
         slug: "echo-ai-pro",
@@ -269,6 +270,33 @@ const PRODUCTS = [
 ];
 
 /**
+ * Load products: merge defaults with admin edits from localStorage
+ */
+const PRODUCTS_STORAGE_KEY = 'skynet-products';
+
+function loadProducts() {
+    const stored = JSON.parse(localStorage.getItem(PRODUCTS_STORAGE_KEY) || 'null');
+    if (!stored) return [...DEFAULT_PRODUCTS];
+    // Merge: stored products override defaults by id, keep new ones added by admin
+    const defaultIds = DEFAULT_PRODUCTS.map(p => p.id);
+    const merged = DEFAULT_PRODUCTS.map(def => {
+        const override = stored.find(s => s.id === def.id);
+        return override || def;
+    });
+    // Add any new products created by admin (ids not in defaults)
+    stored.forEach(s => {
+        if (!defaultIds.includes(s.id)) merged.push(s);
+    });
+    return merged;
+}
+
+function saveProducts(products) {
+    localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(products));
+}
+
+const PRODUCTS = loadProducts();
+
+/**
  * Helper: Format price to EUR
  */
 function formatPrice(price) {
@@ -290,10 +318,13 @@ function generateStars(rating) {
  */
 function createProductCard(product, basePath) {
     const prefix = basePath || '';
+    const imageHTML = product.image
+        ? `<img src="${product.image}" alt="${product.name}" style="max-width:100%;max-height:120px;object-fit:contain;">`
+        : product.emoji;
     return `
         <div class="product-card" data-id="${product.id}">
             <div class="product-card-image">
-                ${product.emoji}
+                ${imageHTML}
                 ${product.discount ? `<span class="product-badge">-${product.discount}%</span>` : ''}
             </div>
             <div class="product-card-body">
