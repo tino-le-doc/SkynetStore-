@@ -2,5 +2,12 @@
   "name": "skynetstore",
   "version": "1.0.0",
   "description": "SkynetStore — Boutique de produits électroniques IA",
-  "private": true
+  "private": true,
+  "scripts": {
+    "test": "jest --verbose"
+  },
+  "devDependencies": {
+    "jest": "^30.3.0",
+    "jsdom": "^29.0.1"
+  }
 }
