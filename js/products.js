@@ -4,6 +4,7 @@
 const PRODUCTS = [
     {
         id: 1,
+        slug: "echo-ai-pro",
         name: "Echo AI Pro — Enceinte Intelligente",
         category: "enceintes",
         categoryLabel: "Enceintes IA",
@@ -25,6 +26,7 @@ const PRODUCTS = [
     },
     {
         id: 2,
+        slug: "neurolens-ar",
         name: "NeuroLens AR — Lunettes Réalité Augmentée",
         category: "wearables",
         categoryLabel: "Wearables IA",
@@ -46,6 +48,7 @@ const PRODUCTS = [
     },
     {
         id: 3,
+        slug: "sentinelcam-360",
         name: "SentinelCam 360 — Caméra de Sécurité IA",
         category: "maison",
         categoryLabel: "Maison Connectée",
@@ -67,6 +70,7 @@ const PRODUCTS = [
     },
     {
         id: 4,
+        slug: "companionbot-mini",
         name: "CompanionBot Mini — Robot Compagnon IA",
         category: "robots",
         categoryLabel: "Robots & Drones",
@@ -88,6 +92,7 @@ const PRODUCTS = [
     },
     {
         id: 5,
+        slug: "sonicbuds-ai",
         name: "SonicBuds AI — Écouteurs IA",
         category: "audio",
         categoryLabel: "Audio IA",
@@ -109,6 +114,7 @@ const PRODUCTS = [
     },
     {
         id: 6,
+        slug: "linguavox",
         name: "LinguaVox — Traducteur IA Portable",
         category: "gadgets",
         categoryLabel: "Gadgets IA",
@@ -130,6 +136,7 @@ const PRODUCTS = [
     },
     {
         id: 7,
+        slug: "novadrone-x1",
         name: "NovaDrone X1 — Drone Autonome IA",
         category: "robots",
         categoryLabel: "Robots & Drones",
@@ -151,6 +158,7 @@ const PRODUCTS = [
     },
     {
         id: 8,
+        slug: "pulsewatch-ai",
         name: "PulseWatch AI — Montre Santé IA",
         category: "wearables",
         categoryLabel: "Wearables IA",
@@ -172,6 +180,7 @@ const PRODUCTS = [
     },
     {
         id: 9,
+        slug: "auralight",
         name: "AuraLight — Ampoule Connectée IA",
         category: "maison",
         categoryLabel: "Maison Connectée",
@@ -193,6 +202,7 @@ const PRODUCTS = [
     },
     {
         id: 10,
+        slug: "mindkey-ai",
         name: "MindKey AI — Clavier Prédictif IA",
         category: "gadgets",
         categoryLabel: "Gadgets IA",
@@ -214,6 +224,7 @@ const PRODUCTS = [
     },
     {
         id: 11,
+        slug: "voxbox-pro",
         name: "VoxBox Pro — Enceinte Multi-Room IA",
         category: "enceintes",
         categoryLabel: "Enceintes IA",
@@ -235,6 +246,7 @@ const PRODUCTS = [
     },
     {
         id: 12,
+        slug: "scangenius",
         name: "ScanGenius — Scanner 3D IA Portable",
         category: "gadgets",
         categoryLabel: "Gadgets IA",
@@ -287,7 +299,7 @@ function createProductCard(product, basePath) {
             <div class="product-card-body">
                 <span class="product-card-category">${product.categoryLabel}</span>
                 <h3 class="product-card-name">
-                    <a href="${prefix}pages/product.html?id=${product.id}">${product.name}</a>
+                    <a href="${prefix}pages/products/${product.slug}.html">${product.name}</a>
                 </h3>
                 <p class="product-card-desc">${product.description}</p>
                 <div class="product-card-footer">

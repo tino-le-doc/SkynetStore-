@@ -2,8 +2,7 @@
  * SkynetStore — Product Detail Page
  */
 document.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const productId = parseInt(params.get('id'));
+    const productId = window.PRODUCT_PAGE_ID || parseInt(new URLSearchParams(window.location.search).get('id'));
     const product = PRODUCTS.find(p => p.id === productId);
 
     if (!product) {
@@ -55,15 +54,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Related products
     const relatedGrid = document.getElementById('related-products');
     if (relatedGrid) {
+        const basePath = window.PRODUCT_PAGE_ID ? '../../' : '../';
         const related = PRODUCTS
             .filter(p => p.category === product.category && p.id !== product.id)
             .slice(0, 4);
         if (related.length === 0) {
-            // Show other popular products if no same-category ones
             const others = PRODUCTS.filter(p => p.id !== product.id).slice(0, 4);
-            relatedGrid.innerHTML = others.map(p => createProductCard(p, '../')).join('');
+            relatedGrid.innerHTML = others.map(p => createProductCard(p, basePath)).join('');
         } else {
-            relatedGrid.innerHTML = related.map(p => createProductCard(p, '../')).join('');
+            relatedGrid.innerHTML = related.map(p => createProductCard(p, basePath)).join('');
         }
     }
 });
