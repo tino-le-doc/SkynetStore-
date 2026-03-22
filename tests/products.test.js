@@ -163,7 +163,7 @@ describe('createProductCard', () => {
     });
 
     test('shows emoji when product has no image', () => {
-        const product = mod.DEFAULT_PRODUCTS[0];
+        const product = { ...mod.DEFAULT_PRODUCTS[0], image: undefined };
         const html = mod.createProductCard(product);
         expect(html).toContain(product.emoji);
     });
