@@ -90,15 +90,27 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebarOverlay.classList.remove('active');
     });
 
-    // ===== VISIT STATS =====
+    // ===== VISIT STATS (Realtime) =====
     function renderVisitStats(productsList) {
         document.getElementById('stat-visits').textContent = Visits.getTotal().toLocaleString('fr-FR');
-        const mostVisited = Visits.getMostVisitedProducts(5);
+        renderMostVisited(productsList);
+    }
+
+    function renderMostVisited(productsList, overrideProducts) {
         const mvEl = document.getElementById('most-visited-products');
-        if (mostVisited.length === 0) {
+        let entries;
+        if (overrideProducts) {
+            entries = Object.entries(overrideProducts)
+                .map(([id, count]) => ({ id: parseInt(id), visits: count }))
+                .sort((a, b) => b.visits - a.visits)
+                .slice(0, 5);
+        } else {
+            entries = Visits.getMostVisitedProducts(5);
+        }
+        if (entries.length === 0) {
             mvEl.innerHTML = '<p class="empty-state">Aucune donnée de visite pour le moment.</p>';
         } else {
-            mvEl.innerHTML = mostVisited.map(mv => {
+            mvEl.innerHTML = entries.map(mv => {
                 const p = productsList.find(x => x.id === mv.id);
                 if (!p) return '';
                 return `
@@ -111,6 +123,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>`;
             }).join('');
         }
+    }
+
+    // Realtime listeners — update dashboard live
+    if (typeof Visits !== 'undefined') {
+        Visits.onTotalChange(total => {
+            document.getElementById('stat-visits').textContent = total.toLocaleString('fr-FR');
+        });
+        Visits.onProductsChange(productsVisits => {
+            const productsList = loadProducts();
+            renderMostVisited(productsList, productsVisits);
+        });
     }
 
     // ===== DASHBOARD =====
@@ -143,10 +166,9 @@ document.addEventListener('DOMContentLoaded', () => {
             `).join('');
         }
 
-        // Visits — affichage initial depuis localStorage, puis mise à jour depuis Firebase
+        // Visits — affichage initial (les listeners RTDB mettent à jour en temps réel)
         if (typeof Visits !== 'undefined') {
             renderVisitStats(products);
-            Visits.loadFromFirebase().then(() => renderVisitStats(products));
         }
 
         // Recent orders
