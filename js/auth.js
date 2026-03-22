@@ -406,7 +406,69 @@ const Auth = (() => {
         return { ok: true };
     }
 
-    return { register, login, logout, getCurrentUser, updateProfile, isLoggedIn, isAdmin, resetPassword, adminResetPassword, deleteUser };
+    // ========================
+    // Google Sign-In
+    // ========================
+    async function loginWithGoogle() {
+        if (!_useFirebase()) {
+            return { ok: false, error: 'La connexion Google nécessite Firebase. Veuillez utiliser email/mot de passe.' };
+        }
+
+        try {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            const cred = await firebaseAuth.signInWithPopup(provider);
+            const uid = cred.user.uid;
+            const email = cred.user.email;
+            const displayName = cred.user.displayName || '';
+            const nameParts = displayName.split(' ');
+
+            // Check if profile exists in Firestore
+            const doc = await db.collection('users').doc(uid).get();
+            let profile;
+
+            if (doc.exists) {
+                profile = doc.data();
+                // Ensure admin role if needed
+                if (email === ADMIN_ACCOUNT.email && profile.role !== 'admin') {
+                    profile.role = 'admin';
+                    await db.collection('users').doc(uid).update({ role: 'admin' });
+                }
+            } else {
+                // New user — create profile
+                const isAdmin = email === ADMIN_ACCOUNT.email;
+                profile = {
+                    id: uid,
+                    firstName: nameParts[0] || email.split('@')[0],
+                    lastName: nameParts.slice(1).join(' ') || '',
+                    email: email,
+                    phone: cred.user.phoneNumber || '',
+                    address: '',
+                    city: '',
+                    postal: '',
+                    country: 'FR',
+                    role: isAdmin ? 'admin' : 'customer',
+                    createdAt: new Date().toISOString()
+                };
+                await db.collection('users').doc(uid).set(profile);
+
+                // Save to Realtime Database
+                if (typeof FirebaseDB !== 'undefined' && FirebaseDB.saveCustomerToRTDB) {
+                    await FirebaseDB.saveCustomerToRTDB(uid, profile);
+                }
+            }
+
+            saveSession(profile);
+            return { ok: true, user: profile };
+        } catch (e) {
+            if (e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') {
+                return { ok: false, error: 'Connexion annulée.' };
+            }
+            console.warn('Google Sign-In error:', e);
+            return { ok: false, error: e.message || 'Erreur lors de la connexion Google.' };
+        }
+    }
+
+    return { register, login, logout, getCurrentUser, updateProfile, isLoggedIn, isAdmin, resetPassword, adminResetPassword, deleteUser, loginWithGoogle };
 })();
 
 // Update account link in header + show admin link if admin
