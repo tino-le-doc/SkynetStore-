@@ -310,14 +310,17 @@ document.addEventListener('DOMContentLoaded', () => {
         saveProducts(products);
         renderProductsTable();
         closeModal();
+        if (document.getElementById('page-supplier').classList.contains('active')) refreshSupplierPage();
     }
 
     function deleteProduct() {
         if (!deletingId) return;
+        if (typeof Supplier !== 'undefined') Supplier.removeMapping(deletingId);
         products = products.filter(p => p.id !== deletingId);
         saveProducts(products);
         renderProductsTable();
         closeDeleteModal();
+        if (document.getElementById('page-supplier').classList.contains('active')) refreshSupplierPage();
     }
 
     // ===== ORDERS =====
@@ -547,6 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td class="admin-actions-cell">
                         <button class="btn-icon btn-edit btn-link-supplier" data-id="${p.id}" title="${linked ? 'Modifier la liaison' : 'Lier au fournisseur'}">🔗</button>
                         ${linked ? `<button class="btn-icon btn-delete btn-unlink-supplier" data-id="${p.id}" title="Supprimer la liaison">✂️</button>` : ''}
+                        <button class="btn-icon btn-delete btn-delete-supplier-product" data-id="${p.id}" title="Supprimer le produit">&#128465;</button>
                     </td>
                 </tr>`;
         }).join('');
@@ -558,6 +562,19 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.addEventListener('click', () => {
                 if (confirm('Supprimer la liaison fournisseur pour ce produit ?')) {
                     Supplier.removeMapping(parseInt(btn.dataset.id));
+                    refreshSupplierPage();
+                }
+            });
+        });
+        mappingsBody.querySelectorAll('.btn-delete-supplier-product').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = parseInt(btn.dataset.id);
+                const p = products.find(x => x.id === id);
+                if (!p) return;
+                if (confirm(`Supprimer le produit « ${p.name} » ? Cette action est irréversible.`)) {
+                    if (typeof Supplier !== 'undefined') Supplier.removeMapping(id);
+                    products = products.filter(x => x.id !== id);
+                    saveProducts(products);
                     refreshSupplierPage();
                 }
             });
@@ -593,6 +610,8 @@ document.addEventListener('DOMContentLoaded', () => {
         closeSupplierModal();
         refreshSupplierPage();
     });
+
+    document.getElementById('supplier-add-product-btn').addEventListener('click', openNewModal);
 
     document.getElementById('supplier-modal-close').addEventListener('click', closeSupplierModal);
     document.getElementById('supplier-modal-cancel').addEventListener('click', closeSupplierModal);
