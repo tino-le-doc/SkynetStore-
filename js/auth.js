@@ -79,6 +79,11 @@ const Auth = (() => {
                 };
                 await db.collection('users').doc(uid).set(profile);
 
+                // Save customer to Realtime Database
+                if (typeof FirebaseDB !== 'undefined' && FirebaseDB.saveCustomerToRTDB) {
+                    await FirebaseDB.saveCustomerToRTDB(uid, profile);
+                }
+
                 // Save session locally (no password)
                 saveSession(profile);
                 return { ok: true, user: profile };
@@ -235,6 +240,11 @@ const Auth = (() => {
                     if (data[key] !== undefined) updates[key] = data[key];
                 });
                 await db.collection('users').doc(String(session.id)).update(updates);
+
+                // Sync update to Realtime Database
+                if (typeof FirebaseDB !== 'undefined' && FirebaseDB.updateCustomerInRTDB) {
+                    await FirebaseDB.updateCustomerInRTDB(String(session.id), updates);
+                }
 
                 // Update session
                 const updated = { ...session, ...updates };
