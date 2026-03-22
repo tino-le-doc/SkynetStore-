@@ -123,6 +123,17 @@ const FirebaseDB = (() => {
         }
     }
 
+    async function deleteUser(userId) {
+        if (!isFirebaseReady()) return false;
+        try {
+            await db.collection('users').doc(String(userId)).delete();
+            return true;
+        } catch (e) {
+            console.warn('FirebaseDB.deleteUser error:', e);
+            return false;
+        }
+    }
+
     async function initAdminUser(adminAccount) {
         if (!isFirebaseReady()) return false;
         try {
@@ -347,7 +358,7 @@ const FirebaseDB = (() => {
         // Products
         getProducts, saveProduct, saveAllProducts, deleteProduct, initProducts,
         // Users
-        getUsers, getUserByEmail, saveUser, initAdminUser,
+        getUsers, getUserByEmail, saveUser, deleteUser, initAdminUser,
         // Realtime Database — Customers
         saveCustomerToRTDB, updateCustomerInRTDB, getCustomersFromRTDB,
         // Orders

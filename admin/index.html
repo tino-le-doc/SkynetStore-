@@ -196,6 +196,7 @@
                                 <th>Ville</th>
                                 <th>Inscrit le</th>
                                 <th>Rôle</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="customers-body"></tbody>
@@ -556,6 +557,41 @@
                 <button class="modal-close" id="order-modal-close">&times;</button>
             </div>
             <div class="modal-body" id="order-modal-body"></div>
+        </div>
+    </div>
+
+    <!-- ===== RESET PASSWORD MODAL ===== -->
+    <div class="modal-overlay" id="reset-password-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Réinitialiser le mot de passe</h2>
+                <button class="modal-close" id="reset-password-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Réinitialiser le mot de passe de <strong id="reset-password-user-name"></strong> (<span id="reset-password-user-email"></span>) ?</p>
+                <div id="reset-password-result" style="display:none;margin:12px 0;padding:10px;border-radius:8px;font-size:0.9rem;"></div>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" id="reset-password-cancel">Annuler</button>
+                    <button class="btn btn-primary" id="reset-password-confirm">Réinitialiser</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== DELETE USER MODAL ===== -->
+    <div class="modal-overlay" id="delete-user-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Supprimer le compte</h2>
+                <button class="modal-close" id="delete-user-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Supprimer le compte de <strong id="delete-user-name"></strong> (<span id="delete-user-email"></span>) ? Cette action est irréversible.</p>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" id="delete-user-cancel">Annuler</button>
+                    <button class="btn btn-danger" id="delete-user-confirm">Supprimer</button>
+                </div>
+            </div>
         </div>
     </div>
 
