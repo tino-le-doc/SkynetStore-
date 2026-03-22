@@ -299,7 +299,42 @@ const Auth = (() => {
         document.addEventListener('DOMContentLoaded', initFirebase);
     }
 
-    return { register, login, logout, getCurrentUser, updateProfile, isLoggedIn, isAdmin };
+    // ========================
+    // Reset Password
+    // ========================
+    async function resetPassword(email) {
+        if (_useFirebase()) {
+            try {
+                await firebaseAuth.sendPasswordResetEmail(email);
+                return { ok: true, message: 'Un email de réinitialisation a été envoyé à ' + email + '.' };
+            } catch (e) {
+                const networkErrors = ['auth/network-request-failed', 'auth/internal-error'];
+                if (networkErrors.includes(e.code) || !e.code) {
+                    console.warn('Firebase indisponible pour reset password, fallback localStorage');
+                } else {
+                    const messages = {
+                        'auth/user-not-found': 'Aucun compte trouvé avec cet email.',
+                        'auth/invalid-email': 'Adresse email invalide.'
+                    };
+                    return { ok: false, error: messages[e.code] || e.message };
+                }
+            }
+        }
+
+        // Fallback: localStorage — simulate reset
+        const users = _getLocalUsers();
+        const user = users.find(u => u.email === email);
+        if (!user) {
+            return { ok: false, error: 'Aucun compte trouvé avec cet email.' };
+        }
+        // Generate a temporary password
+        const tempPassword = 'Reset' + Math.random().toString(36).substring(2, 8);
+        user.password = tempPassword;
+        _saveLocalUsers(users);
+        return { ok: true, message: 'Mot de passe réinitialisé. Nouveau mot de passe temporaire : ' + tempPassword };
+    }
+
+    return { register, login, logout, getCurrentUser, updateProfile, isLoggedIn, isAdmin, resetPassword };
 })();
 
 // Update account link in header + show admin link if admin

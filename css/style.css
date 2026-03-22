@@ -1710,6 +1710,22 @@ img {
     text-decoration: underline;
 }
 
+.auth-forgot {
+    text-align: right;
+    margin-top: 8px;
+    margin-bottom: -8px;
+    font-size: 0.82rem;
+}
+
+.auth-forgot a {
+    color: var(--text-muted);
+}
+
+.auth-forgot a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
 /* ============================
    Account Page (Mon Compte)
    ============================ */

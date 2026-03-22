@@ -59,7 +59,21 @@
                         <input type="password" id="login-password" required placeholder="Votre mot de passe" minlength="6">
                     </div>
                     <button type="submit" class="btn btn-primary btn-block btn-lg">Se connecter</button>
+                    <p class="auth-forgot"><a href="#" id="go-forgot">Mot de passe oublié ?</a></p>
                     <p class="auth-switch">Pas encore de compte ? <a href="#" id="go-register">Créer un compte</a></p>
+                </form>
+
+                <!-- Forgot Password Form -->
+                <form class="auth-form" id="forgot-form" style="display:none;">
+                    <h2>Mot de passe oublié</h2>
+                    <p class="auth-subtitle">Entrez votre email pour recevoir un lien de réinitialisation</p>
+                    <div class="auth-message" id="forgot-message"></div>
+                    <div class="form-group">
+                        <label for="forgot-email">Email</label>
+                        <input type="email" id="forgot-email" required placeholder="votre@email.com">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block btn-lg">Envoyer le lien</button>
+                    <p class="auth-switch"><a href="#" id="go-back-login">Retour à la connexion</a></p>
                 </form>
 
                 <!-- Register Form -->
@@ -171,23 +185,23 @@
 
         const loginForm = document.getElementById('login-form');
         const registerForm = document.getElementById('register-form');
+        const forgotForm = document.getElementById('forgot-form');
         const tabs = document.querySelectorAll('.auth-tab');
 
         function switchTab(tab) {
             tabs.forEach(t => t.classList.remove('active'));
-            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-            if (tab === 'login') {
-                loginForm.style.display = '';
-                registerForm.style.display = 'none';
-            } else {
-                loginForm.style.display = 'none';
-                registerForm.style.display = '';
-            }
+            const activeTab = document.querySelector(`[data-tab="${tab}"]`);
+            if (activeTab) activeTab.classList.add('active');
+            loginForm.style.display = tab === 'login' ? '' : 'none';
+            registerForm.style.display = tab === 'register' ? '' : 'none';
+            forgotForm.style.display = tab === 'forgot' ? '' : 'none';
         }
 
         tabs.forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
         document.getElementById('go-register').addEventListener('click', e => { e.preventDefault(); switchTab('register'); });
         document.getElementById('go-login').addEventListener('click', e => { e.preventDefault(); switchTab('login'); });
+        document.getElementById('go-forgot').addEventListener('click', e => { e.preventDefault(); switchTab('forgot'); });
+        document.getElementById('go-back-login').addEventListener('click', e => { e.preventDefault(); switchTab('login'); });
 
         // Login
         loginForm.addEventListener('submit', async (e) => {
@@ -238,6 +252,26 @@
                 btn.disabled = false;
                 btn.textContent = 'Creer mon compte';
             }
+        });
+
+        // Forgot password
+        forgotForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const msg = document.getElementById('forgot-message');
+            const email = document.getElementById('forgot-email').value;
+            const btn = forgotForm.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.textContent = 'Envoi...';
+            const result = await Auth.resetPassword(email);
+            if (result.ok) {
+                msg.textContent = result.message;
+                msg.className = 'auth-message success';
+            } else {
+                msg.textContent = result.error;
+                msg.className = 'auth-message error';
+            }
+            btn.disabled = false;
+            btn.textContent = 'Envoyer le lien';
         });
 
         // Check URL hash for tab
