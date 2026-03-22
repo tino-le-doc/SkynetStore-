@@ -21,6 +21,10 @@
                 <a href="../index.html#contact" class="nav-link">Contact</a>
             </nav>
             <div class="header-actions">
+                <div class="search-wrapper">
+                    <input type="text" class="search-input" id="search-input" placeholder="Rechercher..." autocomplete="off">
+                    <div class="search-results" id="search-results"></div>
+                </div>
                 <a href="account.html" class="nav-link account-link" id="account-link">Mon Compte</a>
                 <button class="cart-btn" id="cart-btn" aria-label="Panier">
                     <span class="cart-icon">🛒</span>
@@ -37,7 +41,7 @@
     <section class="page-hero">
         <div class="container">
             <h1 class="page-title">Notre Catalogue</h1>
-            <p class="page-subtitle">Explorez plus de 500 produits électroniques propulsés par l'IA</p>
+            <p class="page-subtitle">Explorez plus de 500 produits electroniques propulses par l'IA</p>
         </div>
     </section>
 
@@ -148,8 +152,10 @@
     <script src="../js/firebase-db.js"></script>
 
     <script src="../js/products.js"></script>
+    <script src="../js/wishlist.js"></script>
     <script src="../js/cart.js"></script>
     <script src="../js/auth.js"></script>
+    <script src="../js/search.js"></script>
     <script src="../js/catalog.js"></script>
     <script src="../js/app.js"></script>
 </body>

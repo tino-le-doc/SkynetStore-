@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A propos — SkynetStore</title>
+    <meta name="description" content="Decouvrez SkynetStore, votre boutique de produits electroniques IA. Notre mission, notre equipe et nos valeurs.">
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header" id="header">
+        <div class="container header-inner">
+            <a href="../index.html" class="logo"><span class="logo-icon">⬡</span> SkynetStore</a>
+            <nav class="nav" id="nav">
+                <a href="../index.html" class="nav-link">Accueil</a>
+                <a href="catalog.html" class="nav-link">Catalogue</a>
+                <a href="../index.html#featured" class="nav-link">Populaires</a>
+                <a href="about.html" class="nav-link active">A propos</a>
+                <a href="../index.html#contact" class="nav-link">Contact</a>
+            </nav>
+            <div class="header-actions">
+                <div class="search-wrapper">
+                    <input type="text" class="search-input" id="search-input" placeholder="Rechercher..." autocomplete="off">
+                    <div class="search-results" id="search-results"></div>
+                </div>
+                <a href="account.html" class="nav-link account-link" id="account-link">Mon Compte</a>
+                <button class="cart-btn" id="cart-btn" aria-label="Panier">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="page-hero">
+        <div class="container">
+            <h1 class="page-title">A propos de SkynetStore</h1>
+            <p class="page-subtitle">Le QG des passionnes de technologie IA</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content">
+                    <h2 class="section-title" style="text-align:left;">Notre Mission</h2>
+                    <p>Chez SkynetStore, nous croyons que l'intelligence artificielle doit etre accessible a tous. Notre mission est de selectionner les meilleurs produits electroniques propulses par l'IA et de les rendre accessibles au plus grand nombre.</p>
+                    <p>Fondee en 2026, notre boutique en ligne propose une gamme soigneusement curatee de gadgets, wearables, enceintes intelligentes, robots et bien plus encore — tous integrant des technologies d'IA de pointe.</p>
+
+                    <h2 class="section-title" style="text-align:left;margin-top:40px;">Nos Valeurs</h2>
+                    <div class="values-grid">
+                        <div class="value-card">
+                            <div class="value-icon">🎯</div>
+                            <h3>Qualite</h3>
+                            <p>Chaque produit est teste et approuve par notre equipe avant d'etre propose.</p>
+                        </div>
+                        <div class="value-card">
+                            <div class="value-icon">🌍</div>
+                            <h3>Accessibilite</h3>
+                            <p>Des prix justes pour democratiser l'acces a la technologie IA.</p>
+                        </div>
+                        <div class="value-card">
+                            <div class="value-icon">🔒</div>
+                            <h3>Confiance</h3>
+                            <p>Paiements securises, retours 30 jours et support client reactif.</p>
+                        </div>
+                        <div class="value-card">
+                            <div class="value-icon">🚀</div>
+                            <h3>Innovation</h3>
+                            <p>Toujours a la pointe des dernieres avancees technologiques.</p>
+                        </div>
+                    </div>
+
+                    <h2 class="section-title" style="text-align:left;margin-top:40px;">Nos Chiffres</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-number">500+</span>
+                            <span class="stat-label">Produits IA</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">15K+</span>
+                            <span class="stat-label">Clients Satisfaits</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">98%</span>
+                            <span class="stat-label">Taux de Satisfaction</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">24/7</span>
+                            <span class="stat-label">Support IA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <aside class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Votre Panier</h3>
+            <button class="cart-close" id="cart-close">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <p class="cart-empty">Votre panier est vide</p>
+        </div>
+        <div class="cart-footer" id="cart-footer" style="display:none;">
+            <div class="cart-total">
+                <span>Total :</span>
+                <span id="cart-total-price">0,00 €</span>
+            </div>
+            <a href="checkout.html" class="btn btn-primary btn-block">Commander</a>
+        </div>
+    </aside>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="../index.html" class="logo"><span class="logo-icon">⬡</span> SkynetStore</a>
+                    <p>Le QG des geeks qui refusent de rester en version beta.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Navigation</h4>
+                    <a href="../index.html">Accueil</a>
+                    <a href="catalog.html">Catalogue</a>
+                    <a href="about.html">A propos</a>
+                    <a href="../index.html#contact">Contact</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Informations</h4>
+                    <a href="cgv.html">Conditions Generales</a>
+                    <a href="cgv.html#confidentialite">Politique de Confidentialite</a>
+                    <a href="faq.html">FAQ</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SkynetStore. Tous droits reserves.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/firebase-db.js"></script>
+    <script src="../js/products.js"></script>
+    <script src="../js/wishlist.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/search.js"></script>
+    <script src="../js/app.js"></script>
+</body>
+</html>

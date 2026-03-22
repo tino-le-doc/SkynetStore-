@@ -41,6 +41,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderOrderSummary();
 
+    // Pre-fill form for logged-in users
+    if (typeof Auth !== 'undefined' && Auth.isLoggedIn()) {
+        const user = Auth.getCurrentUser();
+        if (user) {
+            const setVal = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
+            setVal('first-name', user.firstName);
+            setVal('last-name', user.lastName);
+            setVal('email', user.email);
+            setVal('phone', user.phone);
+            setVal('address', user.address);
+            setVal('city', user.city);
+            setVal('postal', user.postal);
+            if (user.country) setVal('country', user.country);
+        }
+    }
+
+    // Card number formatting
+    const cardInput = document.getElementById('card-number');
+    if (cardInput) {
+        cardInput.addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, '').substring(0, 16);
+            e.target.value = v.replace(/(\d{4})(?=\d)/g, '$1 ');
+        });
+    }
+
+    // Expiry formatting
+    const expiryInput = document.getElementById('card-expiry');
+    if (expiryInput) {
+        expiryInput.addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, '').substring(0, 4);
+            if (v.length >= 2) v = v.substring(0, 2) + '/' + v.substring(2);
+            e.target.value = v;
+        });
+    }
+
     // Payment method toggle
     document.querySelectorAll('.payment-option').forEach(opt => {
         opt.addEventListener('click', () => {
