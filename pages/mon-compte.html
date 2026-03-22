@@ -193,16 +193,16 @@
         });
 
         // Profile form
-        document.getElementById('profile-form').addEventListener('submit', e => {
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const result = Auth.updateProfile({
+            const result = await Auth.updateProfile({
                 firstName: document.getElementById('profile-firstname').value,
                 lastName: document.getElementById('profile-lastname').value,
                 phone: document.getElementById('profile-phone').value
             });
             const msg = document.getElementById('profile-message');
             if (result.ok) {
-                msg.textContent = 'Profil mis à jour !';
+                msg.textContent = 'Profil mis a jour !';
                 msg.className = 'auth-message success';
             } else {
                 msg.textContent = result.error;
@@ -211,9 +211,9 @@
         });
 
         // Address form
-        document.getElementById('address-form').addEventListener('submit', e => {
+        document.getElementById('address-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const result = Auth.updateProfile({
+            const result = await Auth.updateProfile({
                 address: document.getElementById('profile-address').value,
                 city: document.getElementById('profile-city').value,
                 postal: document.getElementById('profile-postal').value,
@@ -221,7 +221,7 @@
             });
             const msg = document.getElementById('address-message');
             if (result.ok) {
-                msg.textContent = 'Adresse mise à jour !';
+                msg.textContent = 'Adresse mise a jour !';
                 msg.className = 'auth-message success';
             } else {
                 msg.textContent = result.error;
