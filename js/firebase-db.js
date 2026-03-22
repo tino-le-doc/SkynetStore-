@@ -306,6 +306,46 @@ const FirebaseDB = (() => {
         }
     }
 
+    // ========================
+    // VISITS
+    // ========================
+    async function getVisits() {
+        if (!isFirebaseReady()) return null;
+        try {
+            const doc = await db.collection('config').doc('visits').get();
+            return doc.exists ? doc.data() : null;
+        } catch (e) {
+            console.warn('FirebaseDB.getVisits error:', e);
+            return null;
+        }
+    }
+
+    async function saveVisits(data) {
+        if (!isFirebaseReady()) return false;
+        try {
+            await db.collection('config').doc('visits').set(data);
+            return true;
+        } catch (e) {
+            console.warn('FirebaseDB.saveVisits error:', e);
+            return false;
+        }
+    }
+
+    async function incrementVisit(page, productId) {
+        if (!isFirebaseReady()) return false;
+        try {
+            const increment = firebase.firestore.FieldValue.increment(1);
+            const updates = { total: increment };
+            if (page) updates[`pages.${page.replace(/[/.]/g, '_')}`] = increment;
+            if (productId) updates[`products.${productId}`] = increment;
+            await db.collection('config').doc('visits').set(updates, { merge: true });
+            return true;
+        } catch (e) {
+            console.warn('FirebaseDB.incrementVisit error:', e);
+            return false;
+        }
+    }
+
     return {
         isFirebaseReady,
         // Products
@@ -321,6 +361,8 @@ const FirebaseDB = (() => {
         // Supplier
         getSupplierMappings, saveSupplierMappings,
         getSupplierOrders, saveSupplierOrders,
-        getSupplierConfig, saveSupplierConfig
+        getSupplierConfig, saveSupplierConfig,
+        // Visits
+        getVisits, saveVisits, incrementVisit
     };
 })();
