@@ -7,6 +7,11 @@ const Cart = {
     save() {
         localStorage.setItem('skynet-cart', JSON.stringify(this.items));
         this.updateUI();
+        // Sync cart to Firebase for logged-in users
+        if (typeof FirebaseDB !== 'undefined' && FirebaseDB.isFirebaseReady() && typeof Auth !== 'undefined') {
+            const user = Auth.getCurrentUser();
+            if (user) FirebaseDB.saveCart(user.id, this.items);
+        }
     },
 
     add(productId, qty = 1) {

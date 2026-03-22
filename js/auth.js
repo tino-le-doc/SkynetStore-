@@ -34,6 +34,10 @@ const Auth = (() => {
 
     function saveUsers(users) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+        // Sync each user to Firebase
+        if (typeof FirebaseDB !== 'undefined' && FirebaseDB.isFirebaseReady()) {
+            users.forEach(u => FirebaseDB.saveUser(u));
+        }
     }
 
     function getSession() {
@@ -115,6 +119,18 @@ const Auth = (() => {
 
     function isLoggedIn() {
         return getSession() !== null;
+    }
+
+    // Init admin account in Firebase
+    function initFirebase() {
+        if (typeof FirebaseDB !== 'undefined' && FirebaseDB.isFirebaseReady()) {
+            FirebaseDB.initAdminUser(ADMIN_ACCOUNT);
+        }
+    }
+
+    // Auto-init on load
+    if (typeof document !== 'undefined') {
+        document.addEventListener('DOMContentLoaded', initFirebase);
     }
 
     return { register, login, logout, getCurrentUser, updateProfile, isLoggedIn, isAdmin };
