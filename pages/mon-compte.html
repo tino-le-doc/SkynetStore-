@@ -20,6 +20,10 @@
                 <a href="../index.html#contact" class="nav-link">Contact</a>
             </nav>
             <div class="header-actions">
+                <div class="search-wrapper">
+                    <input type="text" class="search-input" id="search-input" placeholder="Rechercher..." autocomplete="off">
+                    <div class="search-results" id="search-results"></div>
+                </div>
                 <a href="account.html" class="nav-link account-link" id="account-link">Mon Compte</a>
                 <button class="cart-btn" id="cart-btn" aria-label="Panier">
                     <span class="cart-icon">🛒</span>
@@ -101,6 +105,22 @@
                 </div>
             </div>
 
+            <!-- Wishlist -->
+            <div class="account-card account-full">
+                <h3>Mes Favoris</h3>
+                <div id="wishlist-products" class="wishlist-grid">
+                    <p class="empty-msg">Vous n'avez pas encore de favoris.</p>
+                </div>
+            </div>
+
+            <!-- Order History -->
+            <div class="account-card account-full">
+                <h3>Mes Commandes</h3>
+                <div id="order-history">
+                    <p class="empty-msg">Aucune commande pour le moment.</p>
+                </div>
+            </div>
+
             <!-- Account Info -->
             <div class="account-card account-meta">
                 <p>Membre depuis : <strong id="member-since"></strong></p>
@@ -141,8 +161,10 @@
     <script src="../js/firebase-db.js"></script>
 
     <script src="../js/products.js"></script>
+    <script src="../js/wishlist.js"></script>
     <script src="../js/cart.js"></script>
     <script src="../js/auth.js"></script>
+    <script src="../js/search.js"></script>
     <script src="../js/app.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -206,6 +228,74 @@
                 msg.className = 'auth-message error';
             }
         });
+
+        // Wishlist
+        const wishlistEl = document.getElementById('wishlist-products');
+        if (wishlistEl) {
+            const wished = Wishlist.getProducts();
+            if (wished.length > 0) {
+                wishlistEl.innerHTML = wished.map(p => `
+                    <div class="wishlist-item">
+                        <a href="products/${p.slug}.html" class="wishlist-item-img">
+                            ${p.image ? `<img src="${p.image}" alt="${p.name}">` : `<span>${p.emoji}</span>`}
+                        </a>
+                        <div class="wishlist-item-info">
+                            <a href="products/${p.slug}.html" class="wishlist-item-name">${p.name}</a>
+                            <span class="wishlist-item-price">${formatPrice(p.price)}</span>
+                        </div>
+                        <div class="wishlist-item-actions">
+                            <button class="btn btn-primary btn-sm" onclick="addToCart(${p.id})">+ Panier</button>
+                            <button class="btn btn-outline btn-sm" onclick="toggleWishlist(${p.id});location.reload();">Retirer</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Order History
+        const orderHistoryEl = document.getElementById('order-history');
+        if (orderHistoryEl) {
+            const orders = JSON.parse(localStorage.getItem('skynet-orders') || '[]');
+            const userOrders = orders.filter(o => o.customerEmail === user.email || !o.customerEmail);
+            if (userOrders.length > 0) {
+                const statusLabels = {
+                    'pending': 'En attente',
+                    'processing': 'En traitement',
+                    'shipped': 'Expediee',
+                    'delivered': 'Livree',
+                    'cancelled': 'Annulee'
+                };
+                const statusClasses = {
+                    'pending': 'status-pending',
+                    'processing': 'status-processing',
+                    'shipped': 'status-shipped',
+                    'delivered': 'status-delivered',
+                    'cancelled': 'status-cancelled'
+                };
+                orderHistoryEl.innerHTML = `
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Commande</th>
+                                <th>Date</th>
+                                <th>Total</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${userOrders.reverse().map(o => `
+                                <tr>
+                                    <td><strong>${o.id}</strong></td>
+                                    <td>${new Date(o.date).toLocaleDateString('fr-FR')}</td>
+                                    <td>${formatPrice(o.total)}</td>
+                                    <td><span class="order-status ${statusClasses[o.status] || 'status-pending'}">${statusLabels[o.status] || 'En attente'}</span></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            }
+        }
 
         // Logout
         document.getElementById('logout-btn').addEventListener('click', () => {

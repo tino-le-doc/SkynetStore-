@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ — SkynetStore</title>
+    <meta name="description" content="Questions frequemment posees sur SkynetStore : livraison, retours, paiement et plus.">
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header" id="header">
+        <div class="container header-inner">
+            <a href="../index.html" class="logo"><span class="logo-icon">⬡</span> SkynetStore</a>
+            <nav class="nav" id="nav">
+                <a href="../index.html" class="nav-link">Accueil</a>
+                <a href="catalog.html" class="nav-link">Catalogue</a>
+                <a href="../index.html#featured" class="nav-link">Populaires</a>
+                <a href="about.html" class="nav-link">A propos</a>
+                <a href="../index.html#contact" class="nav-link">Contact</a>
+            </nav>
+            <div class="header-actions">
+                <div class="search-wrapper">
+                    <input type="text" class="search-input" id="search-input" placeholder="Rechercher..." autocomplete="off">
+                    <div class="search-results" id="search-results"></div>
+                </div>
+                <a href="account.html" class="nav-link account-link" id="account-link">Mon Compte</a>
+                <button class="cart-btn" id="cart-btn" aria-label="Panier">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="page-hero">
+        <div class="container">
+            <h1 class="page-title">FAQ</h1>
+            <p class="page-subtitle">Questions Frequemment Posees</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container" style="max-width:800px;">
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span>Quels sont les delais de livraison ?</span>
+                        <span class="faq-arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Nous expedions sous 24 a 48h ouvrables. La livraison standard en France prend 3 a 5 jours. La livraison express (1-2 jours) est disponible pour 9,99€. La livraison est gratuite pour toute commande superieure a 50€.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span>Comment retourner un produit ?</span>
+                        <span class="faq-arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Vous disposez de 30 jours apres reception pour retourner un produit. Contactez notre support a support@skynetstore.com pour obtenir une etiquette de retour gratuite. Le remboursement est effectue sous 5 a 10 jours ouvrables apres reception du retour.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span>Quels moyens de paiement acceptez-vous ?</span>
+                        <span class="faq-arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Nous acceptons les cartes bancaires (Visa, Mastercard, American Express), PayPal et Apple Pay. Toutes les transactions sont securisees par un chiffrement SSL 256 bits.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span>Les produits sont-ils garantis ?</span>
+                        <span class="faq-arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Oui, tous nos produits beneficient d'une garantie constructeur de 2 ans minimum. Certains produits disposent d'une garantie etendue. Consultez la fiche produit pour plus de details.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span>Livrez-vous en dehors de la France ?</span>
+                        <span class="faq-arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Oui, nous livrons dans toute l'Europe : Belgique, Suisse, Luxembourg, Allemagne, Espagne, Italie, etc. Les frais de livraison et delais varient selon le pays de destination. Le Canada est egalement desservi.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span>Comment suivre ma commande ?</span>
+                        <span class="faq-arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Une fois votre commande expediee, vous recevrez un email avec un numero de suivi. Vous pouvez egalement suivre vos commandes depuis votre espace "Mon Compte" sur notre site.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span>Proposez-vous un service apres-vente ?</span>
+                        <span class="faq-arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Oui, notre support client est disponible 24/7 grace a notre assistant IA. Pour des demandes specifiques, notre equipe humaine est disponible du lundi au vendredi de 9h a 18h par email a support@skynetstore.com ou par telephone au +33 1 23 45 67 89.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span>Les produits sont-ils neufs ?</span>
+                        <span class="faq-arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Tous les produits vendus sur SkynetStore sont neufs, dans leur emballage d'origine, avec tous les accessoires inclus. Nous ne vendons pas de produits reconditionnes ou d'occasion.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-contact">
+                <h3>Vous n'avez pas trouve votre reponse ?</h3>
+                <p>Contactez notre equipe — nous repondons sous 24h.</p>
+                <a href="../index.html#contact" class="btn btn-primary">Nous Contacter</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <aside class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Votre Panier</h3>
+            <button class="cart-close" id="cart-close">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <p class="cart-empty">Votre panier est vide</p>
+        </div>
+        <div class="cart-footer" id="cart-footer" style="display:none;">
+            <div class="cart-total">
+                <span>Total :</span>
+                <span id="cart-total-price">0,00 €</span>
+            </div>
+            <a href="checkout.html" class="btn btn-primary btn-block">Commander</a>
+        </div>
+    </aside>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="../index.html" class="logo"><span class="logo-icon">⬡</span> SkynetStore</a>
+                    <p>Le QG des geeks qui refusent de rester en version beta.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Navigation</h4>
+                    <a href="../index.html">Accueil</a>
+                    <a href="catalog.html">Catalogue</a>
+                    <a href="about.html">A propos</a>
+                    <a href="../index.html#contact">Contact</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Informations</h4>
+                    <a href="cgv.html">Conditions Generales</a>
+                    <a href="cgv.html#confidentialite">Politique de Confidentialite</a>
+                    <a href="faq.html">FAQ</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SkynetStore. Tous droits reserves.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/firebase-db.js"></script>
+    <script src="../js/products.js"></script>
+    <script src="../js/wishlist.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/search.js"></script>
+    <script src="../js/app.js"></script>
+</body>
+</html>
