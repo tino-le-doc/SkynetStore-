@@ -153,14 +153,25 @@ const Supplier = (() => {
      * Simulation d'envoi de commande au fournisseur
      */
     function simulateForward(order, supplierItems, totalCost) {
-        const supplierOrderId = 'AE-' + Date.now().toString(36).toUpperCase();
+        // Détecter la plateforme depuis les mappings des items
+        const mappings = getMappings();
+        const orderItems = order.items || [];
+        const platforms = [...new Set(orderItems.map(item => {
+            const m = mappings.find(mm => mm.productId === item.id);
+            return m ? m.supplierName || 'AliExpress' : 'AliExpress';
+        }))];
+        const platform = platforms.length === 1 ? platforms[0].toLowerCase().replace(/\s/g, '') : 'multi';
+        const platformPrefix = platform === 'alibaba' ? 'AB' : platform === 'multi' ? 'MX' : 'AE';
+        const platformDisplay = platforms.join(' / ');
+
+        const supplierOrderId = platformPrefix + '-' + Date.now().toString(36).toUpperCase();
         const trackingNumber = 'TRK' + Math.random().toString(36).substring(2, 12).toUpperCase();
 
         const supplierOrder = {
             orderId: order.id,
             supplierOrderId,
-            platform: 'aliexpress',
-            status: 'processing',  // processing | shipped | in_transit | delivered | cancelled
+            platform: platform,
+            status: 'processing',
             items: supplierItems,
             totalCost,
             profit: (order.total || 0) - totalCost,
@@ -172,7 +183,7 @@ const Supplier = (() => {
                 {
                     date: new Date().toISOString(),
                     status: 'processing',
-                    description: 'Commande transmise au fournisseur AliExpress'
+                    description: `Commande transmise au fournisseur ${platformDisplay}`
                 }
             ]
         };
