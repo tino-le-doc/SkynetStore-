@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facture — SkynetStore</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .invoice-page { padding: 100px 0 60px; }
+        .invoice {
+            background: #fff;
+            color: #111;
+            border-radius: 12px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 48px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+        }
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid #eee;
+        }
+        .invoice-brand .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #111;
+            text-decoration: none;
+        }
+        .invoice-brand .logo .logo-icon { color: #00b894; }
+        .invoice-brand p {
+            color: #666;
+            font-size: 0.82rem;
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+        .invoice-meta { text-align: right; }
+        .invoice-meta h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #00b894;
+            margin-bottom: 8px;
+        }
+        .invoice-meta p { color: #555; font-size: 0.88rem; line-height: 1.6; }
+        .invoice-meta strong { color: #111; }
+
+        .invoice-parties {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 36px;
+        }
+        .invoice-party h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        .invoice-party p { font-size: 0.9rem; color: #333; line-height: 1.6; }
+        .invoice-party strong { color: #111; display: block; font-size: 1rem; margin-bottom: 2px; }
+
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+        }
+        .invoice-table thead th {
+            background: #f8f9fa;
+            color: #555;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 2px solid #eee;
+        }
+        .invoice-table thead th:last-child,
+        .invoice-table thead th:nth-child(3),
+        .invoice-table thead th:nth-child(4) { text-align: right; }
+        .invoice-table tbody td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.9rem;
+            color: #333;
+        }
+        .invoice-table tbody td:last-child,
+        .invoice-table tbody td:nth-child(3),
+        .invoice-table tbody td:nth-child(4) { text-align: right; font-family: 'JetBrains Mono', monospace; }
+        .invoice-table tbody td:nth-child(2) { color: #666; font-size: 0.85rem; }
+
+        .invoice-totals {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 36px;
+        }
+        .invoice-totals table { width: 280px; }
+        .invoice-totals td {
+            padding: 8px 0;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .invoice-totals td:last-child {
+            text-align: right;
+            font-family: 'JetBrains Mono', monospace;
+            color: #111;
+        }
+        .invoice-totals tr.total td {
+            padding-top: 12px;
+            border-top: 2px solid #111;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #111;
+        }
+        .invoice-totals tr.total td:last-child { color: #00b894; }
+
+        .invoice-footer {
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            text-align: center;
+            color: #999;
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .invoice-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .invoice-status.paid { background: #d4edda; color: #155724; }
+        .invoice-status.pending { background: #fff3cd; color: #856404; }
+
+        .invoice-actions {
+            text-align: center;
+            margin-top: 24px;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .invoice-empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted, #888);
+        }
+        .invoice-empty h2 { margin-bottom: 12px; }
+
+        @media print {
+            body { background: #fff !important; }
+            .header, .footer, .cart-sidebar, .cart-overlay, .invoice-actions { display: none !important; }
+            .invoice-page { padding: 0 !important; }
+            .invoice {
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                padding: 24px !important;
+                max-width: 100% !important;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .invoice { padding: 24px 16px; }
+            .invoice-header { flex-direction: column; gap: 16px; }
+            .invoice-meta { text-align: left; }
+            .invoice-parties { grid-template-columns: 1fr; gap: 20px; }
+            .invoice-table { font-size: 0.82rem; }
+            .invoice-table thead th,
+            .invoice-table tbody td { padding: 10px 8px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container header-inner">
+            <a href="../index.html" class="logo"><span class="logo-icon">⬡</span> SkynetStore</a>
+            <nav class="nav" id="nav">
+                <a href="../index.html" class="nav-link">Accueil</a>
+                <a href="catalog.html" class="nav-link">Catalogue</a>
+                <a href="../index.html#featured" class="nav-link">Populaires</a>
+                <a href="../index.html#about" class="nav-link">À propos</a>
+                <a href="../index.html#contact" class="nav-link">Contact</a>
+            </nav>
+            <div class="header-actions">
+                <a href="account.html" class="nav-link account-link" id="account-link">Mon Compte</a>
+                <button class="cart-btn" id="cart-btn" aria-label="Panier">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="invoice-page section">
+        <div class="container">
+            <div id="invoice-content">
+                <!-- Filled by JS -->
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="../index.html" class="logo"><span class="logo-icon">⬡</span> SkynetStore</a>
+                    <p>Le QG des geeks qui refusent de rester en version beta.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Navigation</h4>
+                    <a href="../index.html">Accueil</a>
+                    <a href="catalog.html">Catalogue</a>
+                    <a href="about.html">A propos</a>
+                    <a href="../index.html#contact">Contact</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Informations</h4>
+                    <a href="cgv.html">Conditions Generales</a>
+                    <a href="cgv.html#confidentialite">Confidentialite</a>
+                    <a href="faq.html">FAQ</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SkynetStore. Tous droits reserves.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <aside class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Votre Panier</h3>
+            <button class="cart-close" id="cart-close">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <p class="cart-empty">Votre panier est vide</p>
+        </div>
+        <div class="cart-footer" id="cart-footer" style="display:none;">
+            <div class="cart-total">
+                <span>Total :</span>
+                <span id="cart-total-price">0,00 €</span>
+            </div>
+            <a href="checkout.html" class="btn btn-primary btn-block">Commander</a>
+        </div>
+    </aside>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/firebase-db.js"></script>
+
+    <script src="../js/products.js"></script>
+    <script src="../js/wishlist.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/search.js"></script>
+    <script src="../js/visits.js"></script>
+    <script src="../js/app.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('invoice-content');
+        const params = new URLSearchParams(window.location.search);
+        const orderId = params.get('order');
+
+        if (!orderId) {
+            container.innerHTML = '<div class="invoice-empty"><h2>Facture introuvable</h2><p>Aucun numéro de commande spécifié.</p><a href="mon-compte.html" class="btn btn-primary" style="margin-top:16px;">Mes commandes</a></div>';
+            return;
+        }
+
+        // Find order in localStorage
+        const orders = JSON.parse(localStorage.getItem('skynet-orders') || '[]');
+        const order = orders.find(o => o.id === orderId);
+
+        if (!order) {
+            container.innerHTML = '<div class="invoice-empty"><h2>Facture introuvable</h2><p>La commande <strong>' + orderId + '</strong> n\'existe pas.</p><a href="mon-compte.html" class="btn btn-primary" style="margin-top:16px;">Mes commandes</a></div>';
+            return;
+        }
+
+        // Resolve product details
+        const itemsHTML = (order.items || []).map(item => {
+            const product = PRODUCTS.find(p => p.id === item.id);
+            if (!product) return '';
+            const lineTotal = product.price * item.qty;
+            return `
+                <tr>
+                    <td>${product.name}</td>
+                    <td>${product.categoryLabel || ''}</td>
+                    <td>${item.qty}</td>
+                    <td>${formatPrice(product.price)}</td>
+                    <td>${formatPrice(lineTotal)}</td>
+                </tr>
+            `;
+        }).join('');
+
+        // Calculate totals
+        const subtotal = (order.items || []).reduce((sum, item) => {
+            const product = PRODUCTS.find(p => p.id === item.id);
+            return sum + (product ? product.price * item.qty : 0);
+        }, 0);
+        const shipping = subtotal >= 50 ? 0 : 4.99;
+        const total = order.total || (subtotal + shipping);
+
+        // Determine status
+        const statusLabels = {
+            'pending': 'En attente',
+            'confirmed': 'Confirmée',
+            'processing': 'En traitement',
+            'shipped': 'Expédiée',
+            'delivered': 'Livrée',
+            'cancelled': 'Annulée'
+        };
+        const isPaid = ['confirmed', 'processing', 'shipped', 'delivered'].includes(order.status);
+        const statusLabel = statusLabels[order.status] || 'En attente';
+
+        // Format date
+        const orderDate = new Date(order.date);
+        const dateStr = orderDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+
+        // Invoice number derived from order number
+        const invoiceNum = 'FA-' + order.id.replace('SK-', '');
+
+        // Customer info
+        const customerName = order.customerName || 'Client';
+        const customerEmail = order.customerEmail || '';
+        const shippingAddress = order.shippingAddress || null;
+
+        container.innerHTML = `
+            <div class="invoice" id="invoice-printable">
+                <div class="invoice-header">
+                    <div class="invoice-brand">
+                        <a class="logo"><span class="logo-icon">⬡</span> SkynetStore</a>
+                        <p>
+                            42 Rue de l'Innovation<br>
+                            75001 Paris, France<br>
+                            support@skynetstore.eu<br>
+                            +33 1 23 45 67 89
+                        </p>
+                    </div>
+                    <div class="invoice-meta">
+                        <h1>FACTURE</h1>
+                        <p>
+                            <strong>N° ${invoiceNum}</strong><br>
+                            Commande : ${order.id}<br>
+                            Date : ${dateStr}<br>
+                            Statut : <span class="invoice-status ${isPaid ? 'paid' : 'pending'}">${isPaid ? 'Payée' : 'En attente'}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="invoice-parties">
+                    <div class="invoice-party">
+                        <h4>Facturé à</h4>
+                        <strong>${customerName}</strong>
+                        <p>
+                            ${customerEmail ? customerEmail + '<br>' : ''}
+                            ${shippingAddress ? shippingAddress.address + '<br>' + shippingAddress.postal + ' ' + shippingAddress.city + '<br>' + shippingAddress.country : ''}
+                        </p>
+                    </div>
+                    <div class="invoice-party">
+                        <h4>Livré à</h4>
+                        <strong>${customerName}</strong>
+                        <p>
+                            ${shippingAddress ? shippingAddress.address + '<br>' + shippingAddress.postal + ' ' + shippingAddress.city + '<br>' + shippingAddress.country : 'Adresse de livraison'}
+                        </p>
+                    </div>
+                </div>
+
+                <table class="invoice-table">
+                    <thead>
+                        <tr>
+                            <th>Produit</th>
+                            <th>Catégorie</th>
+                            <th>Qté</th>
+                            <th>Prix unit.</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${itemsHTML}
+                    </tbody>
+                </table>
+
+                <div class="invoice-totals">
+                    <table>
+                        <tr>
+                            <td>Sous-total</td>
+                            <td>${formatPrice(subtotal)}</td>
+                        </tr>
+                        <tr>
+                            <td>Livraison</td>
+                            <td>${shipping === 0 ? 'Gratuite' : formatPrice(shipping)}</td>
+                        </tr>
+                        <tr>
+                            <td>TVA (incluse)</td>
+                            <td>${formatPrice(total * 0.2 / 1.2)}</td>
+                        </tr>
+                        <tr class="total">
+                            <td>Total TTC</td>
+                            <td>${formatPrice(total)}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="invoice-footer">
+                    <p>
+                        SkynetStore — SIRET : 123 456 789 00001 — TVA : FR12345678900<br>
+                        Merci pour votre confiance. Conservez cette facture pour vos dossiers.
+                    </p>
+                </div>
+            </div>
+
+            <div class="invoice-actions">
+                <button class="btn btn-primary" onclick="window.print()">Imprimer / PDF</button>
+                <a href="mon-compte.html" class="btn btn-outline">Retour à mon compte</a>
+            </div>
+        `;
+
+        // Update page title
+        document.title = 'Facture ' + invoiceNum + ' — SkynetStore';
+    });
+    </script>
+</body>
+</html>

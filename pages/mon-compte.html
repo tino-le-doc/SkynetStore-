@@ -327,6 +327,7 @@
                                 <th>Date</th>
                                 <th>Total</th>
                                 <th>Statut</th>
+                                <th>Facture</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -336,6 +337,7 @@
                                     <td>${new Date(o.date).toLocaleDateString('fr-FR')}</td>
                                     <td>${formatPrice(o.total)}</td>
                                     <td><span class="order-status ${statusClasses[o.status] || 'status-pending'}">${statusLabels[o.status] || 'En attente'}</span></td>
+                                    <td><a href="invoice.html?order=${encodeURIComponent(o.id)}" class="btn btn-outline btn-sm">Voir</a></td>
                                 </tr>
                             `).join('')}
                         </tbody>
