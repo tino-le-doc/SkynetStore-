@@ -37,6 +37,21 @@ document.addEventListener('DOMContentLoaded', () => {
         if (orderSubtotal) orderSubtotal.textContent = formatPrice(subtotal);
         if (orderShipping) orderShipping.textContent = shipping === 0 ? 'Gratuite' : formatPrice(shipping);
         if (orderTotal) orderTotal.textContent = formatPrice(total);
+
+        // Update shipping recap above confirm button
+        const recapPrice = document.getElementById('shipping-recap-price');
+        const recapTotal = document.getElementById('shipping-recap-total');
+        const recapNote = document.getElementById('shipping-recap-note');
+        if (recapPrice) recapPrice.textContent = shipping === 0 ? 'Gratuite' : formatPrice(shipping);
+        if (recapTotal) recapTotal.textContent = formatPrice(total);
+        if (recapNote) {
+            if (shipping === 0) {
+                recapNote.textContent = 'Vous bénéficiez de la livraison gratuite !';
+            } else {
+                const remaining = 50 - subtotal;
+                recapNote.textContent = 'Plus que ' + formatPrice(remaining) + ' pour la livraison gratuite !';
+            }
+        }
     }
 
     renderOrderSummary();
