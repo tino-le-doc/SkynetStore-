@@ -1377,6 +1377,45 @@ img {
     font-family: var(--font-mono);
 }
 
+/* Shipping Recap (above confirm button) */
+.checkout-shipping-recap {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.shipping-recap-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.shipping-recap-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+}
+
+.shipping-recap-total span:last-child {
+    color: var(--green);
+    font-family: var(--font-mono);
+}
+
+.shipping-recap-note {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 8px;
+    text-align: center;
+}
+
 /* ============================
    Modal
    ============================ */
