@@ -11,7 +11,7 @@ const Auth = (() => {
         id: 1,
         firstName: 'Admin',
         lastName: 'SkynetStore',
-        email: 'admin@skynetstore.com',
+        email: 'admin@skynetstore.eu',
         password: 'admin123',
         phone: '',
         address: '',
