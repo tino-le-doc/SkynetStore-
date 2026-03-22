@@ -125,6 +125,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 FirebaseDB.saveOrder(order);
             }
 
+            // Transmettre la commande au fournisseur (AliExpress)
+            if (typeof Supplier !== 'undefined') {
+                const config = Supplier.getConfig();
+                if (config.autoForward) {
+                    Supplier.forwardOrder(order).then(result => {
+                        if (result.success) {
+                            console.log('Commande transmise au fournisseur:', result.supplierOrderId);
+                        } else {
+                            console.warn('Transmission fournisseur échouée:', result.message);
+                        }
+                    });
+                }
+            }
+
             // Show success modal
             const modal = document.getElementById('success-modal');
             const orderNumEl = document.getElementById('order-number');
