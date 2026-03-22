@@ -40,7 +40,10 @@
         <div class="container">
             <div class="account-header">
                 <h1 class="page-title">Mon Compte</h1>
-                <button class="btn btn-outline" id="logout-btn">Se déconnecter</button>
+                <div class="account-header-actions">
+                    <a href="../admin/index.html" class="btn btn-primary" id="admin-dashboard-btn" style="display:none;">Tableau de bord Admin</a>
+                    <button class="btn btn-outline" id="logout-btn">Se déconnecter</button>
+                </div>
             </div>
 
             <div class="account-grid">
@@ -193,6 +196,12 @@
         if (!user) {
             window.location.href = 'account.html';
             return;
+        }
+
+        // Show admin dashboard button if admin
+        if (user.role === 'admin') {
+            const adminBtn = document.getElementById('admin-dashboard-btn');
+            if (adminBtn) adminBtn.style.display = '';
         }
 
         // Fill profile form
