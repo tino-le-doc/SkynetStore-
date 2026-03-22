@@ -267,9 +267,20 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="edit-image">URL de l'image</label>
-                    <input type="url" id="edit-image" placeholder="https://..." class="form-input">
-                    <div id="image-preview"></div>
+                    <label>Photo du produit</label>
+                    <div class="image-upload-zone" id="image-drop-zone">
+                        <div class="image-upload-placeholder" id="image-upload-placeholder">
+                            <span class="image-upload-icon">📷</span>
+                            <span>Glissez une image ici ou <strong>cliquez pour choisir</strong></span>
+                            <span class="image-upload-hint">JPG, PNG, WebP — max 2 Mo</span>
+                        </div>
+                        <div class="image-upload-preview" id="image-preview" style="display:none;">
+                            <img id="image-preview-img" src="" alt="Aperçu">
+                            <button type="button" class="image-remove-btn" id="image-remove-btn" title="Supprimer l'image">&times;</button>
+                        </div>
+                        <input type="file" id="edit-image-file" accept="image/*" class="image-file-input">
+                    </div>
+                    <input type="hidden" id="edit-image" value="">
                 </div>
                 <div class="form-row">
                     <div class="form-group">

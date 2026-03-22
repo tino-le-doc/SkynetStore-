@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
         form.reset();
         document.getElementById('edit-rating').value = 4.5;
         document.getElementById('edit-reviews').value = 0;
-        imagePreview.innerHTML = '';
+        clearImagePreview();
         modal.style.display = 'flex';
     }
 
@@ -206,11 +206,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function closeDeleteModal() { deleteModal.style.display = 'none'; deletingId = null; }
 
+    // ===== IMAGE UPLOAD =====
+    const dropZone = document.getElementById('image-drop-zone');
+    const fileInput = document.getElementById('edit-image-file');
+    const previewImg = document.getElementById('image-preview-img');
+    const placeholder = document.getElementById('image-upload-placeholder');
+    const removeBtn = document.getElementById('image-remove-btn');
+
+    function showImagePreview(dataUrl) {
+        imageInput.value = dataUrl;
+        previewImg.src = dataUrl;
+        imagePreview.style.display = 'flex';
+        placeholder.style.display = 'none';
+    }
+
+    function clearImagePreview() {
+        imageInput.value = '';
+        previewImg.src = '';
+        fileInput.value = '';
+        imagePreview.style.display = 'none';
+        placeholder.style.display = 'flex';
+    }
+
+    function handleImageFile(file) {
+        if (!file || !file.type.startsWith('image/')) return;
+        if (file.size > 2 * 1024 * 1024) {
+            alert('L\'image ne doit pas dépasser 2 Mo.');
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = (e) => showImagePreview(e.target.result);
+        reader.readAsDataURL(file);
+    }
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files[0]) handleImageFile(e.target.files[0]);
+    });
+
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        if (e.dataTransfer.files[0]) handleImageFile(e.dataTransfer.files[0]);
+    });
+
+    removeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        clearImagePreview();
+    });
+
     function updateImagePreview() {
         const url = imageInput.value.trim();
-        imagePreview.innerHTML = url
-            ? `<img src="${escapeHTML(url)}" alt="Aperçu" style="max-width:200px;max-height:120px;object-fit:contain;border-radius:8px;margin-top:8px;">`
-            : '';
+        if (url) {
+            showImagePreview(url);
+        } else {
+            clearImagePreview();
+        }
     }
 
     function generateSlug(name) {
@@ -460,7 +512,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('delete-confirm').addEventListener('click', deleteProduct);
     document.getElementById('order-modal-close').addEventListener('click', () => { orderModal.style.display = 'none'; });
     form.addEventListener('submit', saveProduct);
-    imageInput.addEventListener('input', updateImagePreview);
 
     document.getElementById('edit-name').addEventListener('input', (e) => {
         if (!editingId) {
