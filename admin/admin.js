@@ -326,6 +326,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function saveOrders(orders) {
         localStorage.setItem('skynet-orders', JSON.stringify(orders));
+        // Sync to Firebase
+        if (typeof FirebaseDB !== 'undefined' && FirebaseDB.isFirebaseReady()) {
+            orders.forEach(o => FirebaseDB.saveOrder(o));
+        }
     }
 
     function statusLabel(status) {
@@ -466,6 +470,10 @@ document.addEventListener('DOMContentLoaded', () => {
             shippingFee: parseFloat(document.getElementById('setting-shipping-fee').value) || 4.99
         };
         localStorage.setItem('skynet-settings', JSON.stringify(settings));
+        // Sync to Firebase
+        if (typeof FirebaseDB !== 'undefined' && FirebaseDB.isFirebaseReady()) {
+            FirebaseDB.saveSettings(settings);
+        }
         alert('Paramètres enregistrés.');
     });
 

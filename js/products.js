@@ -292,9 +292,22 @@ function loadProducts() {
 
 function saveProducts(products) {
     localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(products));
+    // Sync to Firebase
+    if (typeof FirebaseDB !== 'undefined' && FirebaseDB.isFirebaseReady()) {
+        FirebaseDB.saveAllProducts(products);
+    }
 }
 
 const PRODUCTS = loadProducts();
+
+// Init Firebase products on load
+if (typeof FirebaseDB !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+        if (FirebaseDB.isFirebaseReady()) {
+            FirebaseDB.initProducts(DEFAULT_PRODUCTS);
+        }
+    });
+}
 
 /**
  * Helper: Format price to EUR

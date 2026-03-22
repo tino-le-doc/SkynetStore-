@@ -68,6 +68,28 @@ document.addEventListener('DOMContentLoaded', () => {
             // Generate order number
             const orderNum = 'SK-' + Date.now().toString(36).toUpperCase();
 
+            // Build order object
+            const user = typeof Auth !== 'undefined' ? Auth.getCurrentUser() : null;
+            const order = {
+                id: orderNum,
+                customerName: (document.getElementById('first-name')?.value || '') + ' ' + (document.getElementById('last-name')?.value || ''),
+                customerEmail: document.getElementById('email')?.value || (user ? user.email : ''),
+                date: new Date().toISOString(),
+                total: Cart.getTotal() + (Cart.getTotal() >= 50 ? 0 : 4.99),
+                status: 'pending',
+                items: Cart.items.map(i => ({ id: i.id, qty: i.qty }))
+            };
+
+            // Save order to localStorage
+            const orders = JSON.parse(localStorage.getItem('skynet-orders') || '[]');
+            orders.push(order);
+            localStorage.setItem('skynet-orders', JSON.stringify(orders));
+
+            // Sync order to Firebase
+            if (typeof FirebaseDB !== 'undefined' && FirebaseDB.isFirebaseReady()) {
+                FirebaseDB.saveOrder(order);
+            }
+
             // Show success modal
             const modal = document.getElementById('success-modal');
             const orderNumEl = document.getElementById('order-number');
