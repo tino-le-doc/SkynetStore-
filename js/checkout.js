@@ -124,8 +124,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 id: orderNum,
                 customerName: (document.getElementById('first-name')?.value || '') + ' ' + (document.getElementById('last-name')?.value || ''),
                 customerEmail: document.getElementById('email')?.value || (user ? user.email : ''),
+                customerPhone: document.getElementById('phone')?.value || '',
+                shippingAddress: {
+                    address: document.getElementById('address')?.value || '',
+                    city: document.getElementById('city')?.value || '',
+                    postal: document.getElementById('postal')?.value || '',
+                    country: document.getElementById('country')?.selectedOptions[0]?.text || 'France'
+                },
+                paymentMethod: document.querySelector('.payment-option.active input')?.value || 'card',
                 date: new Date().toISOString(),
                 total: Cart.getTotal() + (Cart.getTotal() >= 50 ? 0 : 4.99),
+                subtotal: Cart.getTotal(),
+                shipping: Cart.getTotal() >= 50 ? 0 : 4.99,
                 status: 'pending',
                 items: Cart.items.map(i => ({ id: i.id, qty: i.qty }))
             };
@@ -157,8 +167,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Show success modal
             const modal = document.getElementById('success-modal');
             const orderNumEl = document.getElementById('order-number');
+            const invoiceLink = document.getElementById('invoice-link');
             if (modal) modal.style.display = 'flex';
             if (orderNumEl) orderNumEl.textContent = orderNum;
+            if (invoiceLink) invoiceLink.href = 'invoice.html?order=' + encodeURIComponent(orderNum);
 
             // Clear cart
             Cart.clear();
