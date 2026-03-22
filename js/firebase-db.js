@@ -306,12 +306,50 @@ const FirebaseDB = (() => {
         }
     }
 
+    // ========================
+    // REALTIME DATABASE — Customers
+    // ========================
+    async function saveCustomerToRTDB(uid, profile) {
+        if (!isFirebaseReady() || typeof rtdb === 'undefined') return false;
+        try {
+            await rtdb.ref('customers/' + uid).set(profile);
+            return true;
+        } catch (e) {
+            console.warn('FirebaseDB.saveCustomerToRTDB error:', e);
+            return false;
+        }
+    }
+
+    async function updateCustomerInRTDB(uid, data) {
+        if (!isFirebaseReady() || typeof rtdb === 'undefined') return false;
+        try {
+            await rtdb.ref('customers/' + uid).update(data);
+            return true;
+        } catch (e) {
+            console.warn('FirebaseDB.updateCustomerInRTDB error:', e);
+            return false;
+        }
+    }
+
+    async function getCustomersFromRTDB() {
+        if (!isFirebaseReady() || typeof rtdb === 'undefined') return null;
+        try {
+            const snapshot = await rtdb.ref('customers').once('value');
+            return snapshot.val();
+        } catch (e) {
+            console.warn('FirebaseDB.getCustomersFromRTDB error:', e);
+            return null;
+        }
+    }
+
     return {
         isFirebaseReady,
         // Products
         getProducts, saveProduct, saveAllProducts, deleteProduct, initProducts,
         // Users
         getUsers, getUserByEmail, saveUser, initAdminUser,
+        // Realtime Database — Customers
+        saveCustomerToRTDB, updateCustomerInRTDB, getCustomersFromRTDB,
         // Orders
         getOrders, saveOrder, updateOrderStatus,
         // Settings
