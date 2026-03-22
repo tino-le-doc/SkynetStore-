@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     adminLink.className = 'nav-link';
                     adminLink.style.color = 'var(--accent)';
                     adminLink.textContent = 'Admin';
-                    adminLink.href = isInProducts ? '../admin.html' : (isInPages ? 'admin.html' : 'pages/admin.html');
+                    adminLink.href = isInProducts ? '../../admin/index.html' : (isInPages ? '../admin/index.html' : 'admin/index.html');
                     nav.appendChild(adminLink);
                 }
             }
