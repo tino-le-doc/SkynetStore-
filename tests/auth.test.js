@@ -1,5 +1,6 @@
 /**
  * Tests for auth.js — Authentication and admin role system
+ * Auth methods are async (Firebase Auth with localStorage fallback)
  */
 const fs = require('fs');
 const path = require('path');
@@ -41,21 +42,21 @@ describe('Auth — Admin account', () => {
         Auth = loadAuthModule(createMockLocalStorage());
     });
 
-    test('admin login with correct credentials', () => {
-        const result = Auth.login('admin@skynetstore.eu', 'admin123');
+    test('admin login with correct credentials', async () => {
+        const result = await Auth.login('admin@skynetstore.eu', 'admin123');
         expect(result.ok).toBe(true);
         expect(result.user.role).toBe('admin');
         expect(result.user.firstName).toBe('Admin');
     });
 
-    test('admin login with wrong password fails', () => {
-        const result = Auth.login('admin@skynetstore.eu', 'wrongpassword');
+    test('admin login with wrong password fails', async () => {
+        const result = await Auth.login('admin@skynetstore.eu', 'wrongpassword');
         expect(result.ok).toBe(false);
         expect(result.error).toBeTruthy();
     });
 
-    test('isAdmin returns true after admin login', () => {
-        Auth.login('admin@skynetstore.eu', 'admin123');
+    test('isAdmin returns true after admin login', async () => {
+        await Auth.login('admin@skynetstore.eu', 'admin123');
         expect(Auth.isAdmin()).toBe(true);
     });
 
@@ -71,8 +72,8 @@ describe('Auth — Customer registration', () => {
         Auth = loadAuthModule(createMockLocalStorage());
     });
 
-    test('register a new customer', () => {
-        const result = Auth.register({
+    test('register a new customer', async () => {
+        const result = await Auth.register({
             firstName: 'Jean',
             lastName: 'Dupont',
             email: 'jean@test.com',
@@ -84,14 +85,14 @@ describe('Auth — Customer registration', () => {
         expect(result.user.password).toBeUndefined();
     });
 
-    test('cannot register with existing email', () => {
-        Auth.register({
+    test('cannot register with existing email', async () => {
+        await Auth.register({
             firstName: 'Jean',
             lastName: 'Dupont',
             email: 'jean@test.com',
             password: 'test123'
         });
-        const result = Auth.register({
+        const result = await Auth.register({
             firstName: 'Jean2',
             lastName: 'Dupont2',
             email: 'jean@test.com',
@@ -100,8 +101,8 @@ describe('Auth — Customer registration', () => {
         expect(result.ok).toBe(false);
     });
 
-    test('cannot register with admin email', () => {
-        const result = Auth.register({
+    test('cannot register with admin email', async () => {
+        const result = await Auth.register({
             firstName: 'Fake',
             lastName: 'Admin',
             email: 'admin@skynetstore.eu',
@@ -118,36 +119,36 @@ describe('Auth — Customer login', () => {
         Auth = loadAuthModule(createMockLocalStorage());
     });
 
-    test('login with registered customer', () => {
-        Auth.register({
+    test('login with registered customer', async () => {
+        await Auth.register({
             firstName: 'Marie',
             lastName: 'Martin',
             email: 'marie@test.com',
             password: 'pass123'
         });
-        Auth.logout();
+        await Auth.logout();
 
-        const result = Auth.login('marie@test.com', 'pass123');
+        const result = await Auth.login('marie@test.com', 'pass123');
         expect(result.ok).toBe(true);
         expect(result.user.firstName).toBe('Marie');
         expect(result.user.role).toBe('customer');
     });
 
-    test('login with wrong password fails', () => {
-        Auth.register({
+    test('login with wrong password fails', async () => {
+        await Auth.register({
             firstName: 'Marie',
             lastName: 'Martin',
             email: 'marie@test.com',
             password: 'pass123'
         });
-        Auth.logout();
+        await Auth.logout();
 
-        const result = Auth.login('marie@test.com', 'wrong');
+        const result = await Auth.login('marie@test.com', 'wrong');
         expect(result.ok).toBe(false);
     });
 
-    test('isAdmin returns false for customer', () => {
-        Auth.register({
+    test('isAdmin returns false for customer', async () => {
+        await Auth.register({
             firstName: 'Marie',
             lastName: 'Martin',
             email: 'marie@test.com',
@@ -172,16 +173,16 @@ describe('Auth — Session management', () => {
         expect(Auth.isLoggedIn()).toBe(false);
     });
 
-    test('logout clears session', () => {
-        Auth.login('admin@skynetstore.eu', 'admin123');
+    test('logout clears session', async () => {
+        await Auth.login('admin@skynetstore.eu', 'admin123');
         expect(Auth.isLoggedIn()).toBe(true);
-        Auth.logout();
+        await Auth.logout();
         expect(Auth.isLoggedIn()).toBe(false);
         expect(Auth.getCurrentUser()).toBeNull();
     });
 
-    test('session does not include password', () => {
-        Auth.login('admin@skynetstore.eu', 'admin123');
+    test('session does not include password', async () => {
+        await Auth.login('admin@skynetstore.eu', 'admin123');
         const user = Auth.getCurrentUser();
         expect(user.password).toBeUndefined();
     });
@@ -194,22 +195,22 @@ describe('Auth — Profile update', () => {
         Auth = loadAuthModule(createMockLocalStorage());
     });
 
-    test('update profile fields', () => {
-        Auth.register({
+    test('update profile fields', async () => {
+        await Auth.register({
             firstName: 'Pierre',
             lastName: 'Durand',
             email: 'pierre@test.com',
             password: 'pass'
         });
 
-        const result = Auth.updateProfile({ firstName: 'Pedro', city: 'Paris' });
+        const result = await Auth.updateProfile({ firstName: 'Pedro', city: 'Paris' });
         expect(result.ok).toBe(true);
         expect(result.user.firstName).toBe('Pedro');
         expect(result.user.city).toBe('Paris');
     });
 
-    test('update fails when not logged in', () => {
-        const result = Auth.updateProfile({ firstName: 'Hacker' });
+    test('update fails when not logged in', async () => {
+        const result = await Auth.updateProfile({ firstName: 'Hacker' });
         expect(result.ok).toBe(false);
     });
 });

@@ -167,22 +167,27 @@
         document.getElementById('go-login').addEventListener('click', e => { e.preventDefault(); switchTab('login'); });
 
         // Login
-        loginForm.addEventListener('submit', e => {
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const msg = document.getElementById('login-message');
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
-            const result = Auth.login(email, password);
+            const btn = loginForm.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.textContent = 'Connexion...';
+            const result = await Auth.login(email, password);
             if (result.ok) {
                 window.location.href = 'mon-compte.html';
             } else {
                 msg.textContent = result.error;
                 msg.className = 'auth-message error';
+                btn.disabled = false;
+                btn.textContent = 'Se connecter';
             }
         });
 
         // Register
-        registerForm.addEventListener('submit', e => {
+        registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const msg = document.getElementById('register-message');
             const password = document.getElementById('reg-password').value;
@@ -192,7 +197,10 @@
                 msg.className = 'auth-message error';
                 return;
             }
-            const result = Auth.register({
+            const btn = registerForm.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.textContent = 'Creation...';
+            const result = await Auth.register({
                 firstName: document.getElementById('reg-firstname').value,
                 lastName: document.getElementById('reg-lastname').value,
                 email: document.getElementById('reg-email').value,
@@ -204,6 +212,8 @@
             } else {
                 msg.textContent = result.error;
                 msg.className = 'auth-message error';
+                btn.disabled = false;
+                btn.textContent = 'Creer mon compte';
             }
         });
 
