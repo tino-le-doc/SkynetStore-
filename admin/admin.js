@@ -480,6 +480,13 @@ document.addEventListener('DOMContentLoaded', () => {
         return JSON.parse(localStorage.getItem('skynet-users') || '[]');
     }
 
+    // ===== CUSTOMER MANAGEMENT =====
+    let resetPasswordTarget = null;
+    let deleteUserTarget = null;
+
+    const resetPasswordModal = document.getElementById('reset-password-modal');
+    const deleteUserModal = document.getElementById('delete-user-modal');
+
     function renderCustomers() {
         const users = getUsers();
         const customersBody = document.getElementById('customers-body');
@@ -491,9 +498,74 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${escapeHTML(u.city || '—')}</td>
                 <td>${u.createdAt ? new Date(u.createdAt).toLocaleDateString('fr-FR') : '—'}</td>
                 <td><span class="admin-badge" style="${u.role === 'admin' ? 'background:rgba(255,107,0,0.15);color:var(--accent);' : ''}">${u.role === 'admin' ? 'Admin' : 'Client'}</span></td>
+                <td class="customer-actions">
+                    <button class="btn btn-sm btn-outline btn-reset-pw" data-id="${u.id}" data-email="${escapeHTML(u.email)}" data-name="${escapeHTML(u.firstName || '')} ${escapeHTML(u.lastName || '')}" title="Réinitialiser le mot de passe">&#128274; Réinit. MDP</button>
+                    ${u.role !== 'admin' ? `<button class="btn btn-sm btn-danger btn-delete-user" data-id="${u.id}" data-email="${escapeHTML(u.email)}" data-name="${escapeHTML(u.firstName || '')} ${escapeHTML(u.lastName || '')}" title="Supprimer le compte">&#128465; Supprimer</button>` : ''}
+                </td>
             </tr>
         `).join('');
+
+        // Bind reset password buttons
+        customersBody.querySelectorAll('.btn-reset-pw').forEach(btn => {
+            btn.addEventListener('click', () => {
+                resetPasswordTarget = { id: btn.dataset.id, email: btn.dataset.email, name: btn.dataset.name };
+                document.getElementById('reset-password-user-name').textContent = btn.dataset.name;
+                document.getElementById('reset-password-user-email').textContent = btn.dataset.email;
+                document.getElementById('reset-password-result').style.display = 'none';
+                resetPasswordModal.style.display = 'flex';
+            });
+        });
+
+        // Bind delete user buttons
+        customersBody.querySelectorAll('.btn-delete-user').forEach(btn => {
+            btn.addEventListener('click', () => {
+                deleteUserTarget = { id: btn.dataset.id, email: btn.dataset.email, name: btn.dataset.name };
+                document.getElementById('delete-user-name').textContent = btn.dataset.name;
+                document.getElementById('delete-user-email').textContent = btn.dataset.email;
+                deleteUserModal.style.display = 'flex';
+            });
+        });
     }
+
+    // Reset password modal handlers
+    document.getElementById('reset-password-modal-close').addEventListener('click', () => { resetPasswordModal.style.display = 'none'; });
+    document.getElementById('reset-password-cancel').addEventListener('click', () => { resetPasswordModal.style.display = 'none'; });
+    document.getElementById('reset-password-confirm').addEventListener('click', async () => {
+        if (!resetPasswordTarget) return;
+        const confirmBtn = document.getElementById('reset-password-confirm');
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'En cours...';
+        const result = await Auth.adminResetPassword(resetPasswordTarget.email);
+        const resultEl = document.getElementById('reset-password-result');
+        resultEl.style.display = 'block';
+        if (result.ok) {
+            resultEl.style.background = 'rgba(0,200,100,0.1)';
+            resultEl.style.color = '#00c864';
+            resultEl.textContent = result.message;
+        } else {
+            resultEl.style.background = 'rgba(255,60,60,0.1)';
+            resultEl.style.color = 'var(--red)';
+            resultEl.textContent = result.error;
+        }
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Réinitialiser';
+    });
+
+    // Delete user modal handlers
+    document.getElementById('delete-user-modal-close').addEventListener('click', () => { deleteUserModal.style.display = 'none'; });
+    document.getElementById('delete-user-cancel').addEventListener('click', () => { deleteUserModal.style.display = 'none'; });
+    document.getElementById('delete-user-confirm').addEventListener('click', async () => {
+        if (!deleteUserTarget) return;
+        const confirmBtn = document.getElementById('delete-user-confirm');
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'Suppression...';
+        await Auth.deleteUser(deleteUserTarget.id, deleteUserTarget.email);
+        deleteUserModal.style.display = 'none';
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Supprimer';
+        renderCustomers();
+        refreshDashboard();
+    });
 
     // ===== SETTINGS =====
     function loadSettings() {

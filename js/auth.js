@@ -344,7 +344,69 @@ const Auth = (() => {
         return { ok: true, message: 'Mot de passe réinitialisé. Nouveau mot de passe temporaire : ' + tempPassword };
     }
 
-    return { register, login, logout, getCurrentUser, updateProfile, isLoggedIn, isAdmin, resetPassword };
+    // ========================
+    // Admin: Reset user password
+    // ========================
+    async function adminResetPassword(email) {
+        if (_useFirebase()) {
+            try {
+                await firebaseAuth.sendPasswordResetEmail(email);
+                return { ok: true, message: 'Un email de réinitialisation a été envoyé à ' + email + '.' };
+            } catch (e) {
+                const networkErrors = ['auth/network-request-failed', 'auth/internal-error'];
+                if (networkErrors.includes(e.code) || !e.code) {
+                    console.warn('Firebase indisponible pour reset password admin, fallback localStorage');
+                } else {
+                    const messages = {
+                        'auth/user-not-found': 'Aucun compte trouvé avec cet email.',
+                        'auth/invalid-email': 'Adresse email invalide.'
+                    };
+                    return { ok: false, error: messages[e.code] || e.message };
+                }
+            }
+        }
+
+        // Fallback: localStorage
+        const users = _getLocalUsers();
+        const user = users.find(u => u.email === email);
+        if (!user) {
+            return { ok: false, error: 'Aucun compte trouvé avec cet email.' };
+        }
+        const tempPassword = 'Reset' + Math.random().toString(36).substring(2, 8);
+        user.password = tempPassword;
+        _saveLocalUsers(users);
+        return { ok: true, message: 'Nouveau mot de passe temporaire : ' + tempPassword };
+    }
+
+    // ========================
+    // Admin: Delete user account
+    // ========================
+    async function deleteUser(userId, email) {
+        // Delete from Firebase Firestore
+        if (_useFirebase()) {
+            try {
+                await db.collection('users').doc(String(userId)).delete();
+                // Also remove from Realtime Database
+                if (typeof FirebaseDB !== 'undefined' && typeof rtdb !== 'undefined') {
+                    try { await rtdb.ref('customers/' + userId).remove(); } catch (e) { /* ignore */ }
+                }
+            } catch (e) {
+                console.warn('Firebase deleteUser error:', e);
+            }
+        }
+
+        // Delete from localStorage
+        const users = _getLocalUsers();
+        const idx = users.findIndex(u => u.id === userId || u.email === email);
+        if (idx !== -1) {
+            users.splice(idx, 1);
+            _saveLocalUsers(users);
+        }
+
+        return { ok: true };
+    }
+
+    return { register, login, logout, getCurrentUser, updateProfile, isLoggedIn, isAdmin, resetPassword, adminResetPassword, deleteUser };
 })();
 
 // Update account link in header + show admin link if admin
