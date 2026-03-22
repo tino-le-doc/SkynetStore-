@@ -4,12 +4,14 @@
  * https://console.firebase.google.com/
  */
 const firebaseConfig = {
-    apiKey: "VOTRE_API_KEY",
-    authDomain: "VOTRE_PROJET.firebaseapp.com",
-    projectId: "VOTRE_PROJECT_ID",
-    storageBucket: "VOTRE_PROJET.firebasestorage.app",
-    messagingSenderId: "VOTRE_SENDER_ID",
-    appId: "VOTRE_APP_ID"
+    apiKey: "AIzaSyB36LKnn3cHzCaYtSXhmZYMGKAm9BRQnEg",
+    authDomain: "skynetstore.firebaseapp.com",
+    databaseURL: "https://skynetstore-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "skynetstore",
+    storageBucket: "skynetstore.firebasestorage.app",
+    messagingSenderId: "740908460183",
+    appId: "1:740908460183:web:3dc6a3aa77b889ddf161d2",
+    measurementId: "G-GVSJZ0TMFE"
 };
 
 // Initialize Firebase
