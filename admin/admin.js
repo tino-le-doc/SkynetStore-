@@ -594,6 +594,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return `
                 <tr>
                     <td><strong>${escapeHTML(p.name)}</strong></td>
+                    <td>${linked ? `<span class="admin-badge">${escapeHTML(platformLabel(mapping.supplierName))}</span>` : '—'}</td>
                     <td>${formatPrice(p.price)}</td>
                     <td>${linked ? `<code style="background:rgba(46,125,50,0.1);padding:2px 6px;border-radius:4px;">${escapeHTML(mapping.supplierProductId)}</code>` : '<span style="color:var(--red);">Non lié</span>'}</td>
                     <td>${linked ? formatPrice(mapping.supplierPrice) : '—'}</td>
@@ -632,6 +633,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const PLATFORM_LABELS = { aliexpress: 'AliExpress', alibaba: 'Alibaba' };
+    const PLATFORM_PLACEHOLDERS = {
+        aliexpress: { id: 'Ex: 1005006123456789', url: 'https://aliexpress.com/item/...' },
+        alibaba:    { id: 'Ex: 62345678901', url: 'https://alibaba.com/product-detail/...' }
+    };
+
+    function platformLabel(name) {
+        if (!name) return '—';
+        const key = name.toLowerCase().replace(/\s/g, '');
+        return PLATFORM_LABELS[key] || name;
+    }
+
+    function updateSupplierModalPlaceholders() {
+        const platform = document.getElementById('supplier-edit-platform').value;
+        const ph = PLATFORM_PLACEHOLDERS[platform] || PLATFORM_PLACEHOLDERS.aliexpress;
+        document.getElementById('supplier-edit-id').placeholder = ph.id;
+        document.getElementById('supplier-edit-url').placeholder = ph.url;
+    }
+
+    document.getElementById('supplier-edit-platform').addEventListener('change', updateSupplierModalPlaceholders);
+
     function openSupplierModal(productId) {
         const p = products.find(x => x.id === productId);
         if (!p) return;
@@ -639,10 +661,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.getElementById('supplier-edit-product-id').value = productId;
         document.getElementById('supplier-edit-product-name').value = p.name;
+        document.getElementById('supplier-edit-platform').value = mapping ? (mapping.supplierName || 'aliexpress').toLowerCase().replace(/\s/g, '') : 'aliexpress';
         document.getElementById('supplier-edit-id').value = mapping ? mapping.supplierProductId : '';
         document.getElementById('supplier-edit-url').value = mapping ? mapping.supplierProductUrl : '';
         document.getElementById('supplier-edit-sku').value = mapping ? mapping.supplierSku : '';
         document.getElementById('supplier-edit-price').value = mapping ? mapping.supplierPrice : '';
+        updateSupplierModalPlaceholders();
 
         supplierModal.style.display = 'flex';
     }
@@ -652,11 +676,13 @@ document.addEventListener('DOMContentLoaded', () => {
     supplierForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const productId = parseInt(document.getElementById('supplier-edit-product-id').value);
+        const platform = document.getElementById('supplier-edit-platform').value;
         Supplier.setMapping(productId, {
             supplierProductId: document.getElementById('supplier-edit-id').value.trim(),
             supplierProductUrl: document.getElementById('supplier-edit-url').value.trim(),
             supplierSku: document.getElementById('supplier-edit-sku').value.trim(),
-            supplierPrice: document.getElementById('supplier-edit-price').value
+            supplierPrice: document.getElementById('supplier-edit-price').value,
+            supplierName: PLATFORM_LABELS[platform] || platform
         });
         closeSupplierModal();
         refreshSupplierPage();

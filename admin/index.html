@@ -207,7 +207,7 @@
         <!-- ===== SUPPLIER / FOURNISSEUR ===== -->
         <section class="page" id="page-supplier">
             <div class="page-header">
-                <h1>Fournisseur AliExpress</h1>
+                <h1>Fournisseurs</h1>
             </div>
 
             <!-- Stats fournisseur -->
@@ -251,6 +251,7 @@
                             <label>Plateforme</label>
                             <select id="supplier-platform" class="form-input">
                                 <option value="aliexpress">AliExpress</option>
+                                <option value="alibaba">Alibaba</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -280,7 +281,7 @@
                     <div class="card-header"><h2>Comment ça marche</h2></div>
                     <div class="card-body">
                         <p class="text-secondary" style="line-height:1.8;">
-                            <strong>1.</strong> Liez chaque produit à son équivalent AliExpress ci-dessous.<br>
+                            <strong>1.</strong> Liez chaque produit à son équivalent sur AliExpress ou Alibaba ci-dessous.<br>
                             <strong>2.</strong> Quand un client passe commande, elle est automatiquement transmise au fournisseur.<br>
                             <strong>3.</strong> Suivez le statut des commandes fournisseur et les numéros de tracking.<br>
                             <strong>4.</strong> En mode <em>simulation</em>, tout fonctionne sans appel API réel.
@@ -292,7 +293,7 @@
             <!-- Mapping produits -->
             <div class="card" style="margin-top:24px;">
                 <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
-                    <h2>Liaison Produits — AliExpress</h2>
+                    <h2>Liaison Produits — Fournisseurs</h2>
                     <button class="btn btn-primary" id="supplier-add-product-btn">+ Ajouter un produit</button>
                 </div>
                 <div class="table-wrapper">
@@ -300,8 +301,9 @@
                         <thead>
                             <tr>
                                 <th>Produit</th>
+                                <th>Plateforme</th>
                                 <th>Prix de vente</th>
-                                <th>ID AliExpress</th>
+                                <th>ID Fournisseur</th>
                                 <th>Prix fournisseur</th>
                                 <th>Marge</th>
                                 <th>Actions</th>
@@ -351,12 +353,19 @@
                         <input type="text" id="supplier-edit-product-name" class="form-input" disabled>
                     </div>
                     <div class="form-group">
-                        <label>ID Produit AliExpress</label>
+                        <label>Plateforme fournisseur</label>
+                        <select id="supplier-edit-platform" class="form-input">
+                            <option value="aliexpress">AliExpress</option>
+                            <option value="alibaba">Alibaba</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label id="supplier-edit-id-label">ID Produit fournisseur</label>
                         <input type="text" id="supplier-edit-id" class="form-input" placeholder="Ex: 1005006123456789" required>
                     </div>
                     <div class="form-group">
-                        <label>URL AliExpress</label>
-                        <input type="url" id="supplier-edit-url" class="form-input" placeholder="https://aliexpress.com/item/...">
+                        <label id="supplier-edit-url-label">URL fournisseur</label>
+                        <input type="url" id="supplier-edit-url" class="form-input" placeholder="https://...">
                     </div>
                     <div class="form-group">
                         <label>SKU Fournisseur</label>
