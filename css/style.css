@@ -7,22 +7,22 @@
     --bg-secondary: #e8f5e9;
     --bg-card: rgba(255, 255, 255, 0.85);
     --bg-card-hover: rgba(232, 245, 233, 0.9);
-    --accent: #2e7d32;
-    --accent-light: #388e3c;
-    --accent-glow: rgba(46, 125, 50, 0.2);
+    --accent: #ff6b00;
+    --accent-light: #ff8c33;
+    --accent-glow: rgba(255, 107, 0, 0.2);
     --cyan: #00897b;
     --green: #2e7d32;
     --pink: #e91e63;
-    --text-primary: #1a2e1a;
-    --text-secondary: #5a7a5a;
-    --text-muted: #8a9e8a;
+    --text-primary: #ff6b00;
+    --text-secondary: #e06000;
+    --text-muted: #cc7a33;
     --border: rgba(46, 125, 50, 0.15);
     --border-light: rgba(46, 125, 50, 0.25);
     --radius: 12px;
     --radius-sm: 8px;
     --radius-lg: 20px;
     --shadow: 0 4px 24px rgba(46, 125, 50, 0.08);
-    --shadow-glow: 0 0 30px rgba(46, 125, 50, 0.15);
+    --shadow-glow: 0 0 30px rgba(255, 107, 0, 0.2);
     --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
@@ -295,8 +295,8 @@ img {
 .hero-badge {
     display: inline-block;
     padding: 8px 20px;
-    background: rgba(46, 125, 50, 0.1);
-    border: 1px solid rgba(46, 125, 50, 0.3);
+    background: rgba(255, 107, 0, 0.1);
+    border: 1px solid rgba(255, 107, 0, 0.3);
     border-radius: 50px;
     font-size: 0.85rem;
     font-weight: 500;
@@ -313,7 +313,7 @@ img {
 }
 
 .gradient-text {
-    background: linear-gradient(135deg, var(--accent), #43a047);
+    background: linear-gradient(135deg, #ff6b00, #ff9a44);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -698,7 +698,7 @@ img {
 .product-category-badge {
     display: inline-block;
     padding: 4px 12px;
-    background: rgba(46, 125, 50, 0.1);
+    background: rgba(255, 107, 0, 0.1);
     color: var(--accent);
     border-radius: 50px;
     font-size: 0.75rem;
@@ -1283,7 +1283,7 @@ img {
 .payment-option.active,
 .payment-option:has(input:checked) {
     border-color: var(--accent);
-    background: rgba(46, 125, 50, 0.1);
+    background: rgba(255, 107, 0, 0.1);
 }
 
 .payment-option input {
