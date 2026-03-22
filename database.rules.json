@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "customers": {
+      "$uid": {
+        ".read": "auth != null",
+        ".write": "auth != null && (auth.uid === $uid || root.child('customers').child(auth.uid).child('role').val() === 'admin')"
+      }
+    }
+  }
+}
