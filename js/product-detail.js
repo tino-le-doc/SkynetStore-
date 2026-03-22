@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fill page
     document.title = product.name + ' — SkynetStore';
+
+    // Track product visit
+    if (typeof Visits !== 'undefined') Visits.trackProduct(productId);
     document.getElementById('breadcrumb-product').textContent = product.name;
     document.getElementById('product-image').innerHTML = product.image
         ? `<img src="${product.image}" alt="${product.name}" style="max-width:100%;max-height:300px;object-fit:contain;">`

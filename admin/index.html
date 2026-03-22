@@ -93,6 +93,13 @@
                         <span class="stat-label">Chiffre d'affaires</span>
                     </div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👁</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-visits">0</span>
+                        <span class="stat-label">Visites totales</span>
+                    </div>
+                </div>
             </div>
 
             <div class="dashboard-grid">
@@ -109,6 +116,16 @@
                         <h2>Produits populaires</h2>
                     </div>
                     <div class="card-body" id="popular-products"></div>
+                </div>
+            </div>
+
+            <!-- Most visited products -->
+            <div class="card" style="margin-top:24px;">
+                <div class="card-header">
+                    <h2>Produits les plus visités</h2>
+                </div>
+                <div class="card-body" id="most-visited-products">
+                    <p class="empty-state">Aucune donnée de visite pour le moment.</p>
                 </div>
             </div>
         </section>
@@ -543,6 +560,7 @@
     <script src="../js/products.js"></script>
     <script src="../js/auth.js"></script>
     <script src="../js/supplier.js"></script>
+    <script src="../js/visits.js"></script>
     <script src="admin.js"></script>
 </body>
 </html>
