@@ -73,25 +73,36 @@
     </section>
 
     <!-- Produit du moment -->
-    <section class="section" id="product-highlight">
+    <section class="section product-highlight" id="product-highlight">
         <div class="container">
-            <h2>😎 Produit du moment</h2>
-            <div style="display:flex; gap:40px; align-items:center; flex-wrap:wrap;">
-
-                <img src="images/smart-glasses.jpg" style="max-width:300px; border-radius:20px;">
-
-                <div>
-                    <h3>Lunettes IA SmartVision</h3>
-                    <p>
-                        ✔ Filmez sans les mains<br>
-                        ✔ Assistant vocal intégré<br>
-                        ✔ Écoutez votre musique partout<br>
-                        ✔ Ultra discret et stylé
+            <h2 class="section-title">Produit du Moment</h2>
+            <p class="section-subtitle">Le coup de coeur de notre équipe</p>
+            <div class="highlight-card">
+                <div class="highlight-image">
+                    <img src="https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?w=600&h=600&fit=crop" alt="NeuroLens AR — Lunettes Réalité Augmentée" loading="lazy">
+                    <span class="product-badge">-22%</span>
+                </div>
+                <div class="highlight-info">
+                    <span class="highlight-category">Wearables IA</span>
+                    <h3 class="highlight-name">NeuroLens AR — Lunettes Réalité Augmentée</h3>
+                    <div class="highlight-rating">⭐⭐⭐⭐⭐ <span>(128 avis)</span></div>
+                    <p class="highlight-desc">
+                        Lunettes AR légères avec IA intégrée. Traduction en temps réel, navigation holographique, assistant visuel et affichage tête haute. Le futur se porte sur le nez.
                     </p>
-                    <h2 style="color:#00ffcc;">149€</h2>
-                    <a href="pages/checkout.html" class="btn btn-primary">
-                        🚀 Acheter maintenant
-                    </a>
+                    <ul class="highlight-features">
+                        <li>Affichage AR haute résolution</li>
+                        <li>Traduction instantanée en 40 langues</li>
+                        <li>Navigation GPS holographique</li>
+                        <li>Assistant IA contextuel</li>
+                    </ul>
+                    <div class="highlight-pricing">
+                        <span class="highlight-price">349,99 €</span>
+                        <span class="highlight-old-price">449,99 €</span>
+                    </div>
+                    <div class="highlight-actions">
+                        <a href="pages/products/neurolens-ar.html" class="btn btn-outline">Voir la fiche</a>
+                        <button class="btn btn-primary" onclick="addToCart(2)">Ajouter au panier</button>
+                    </div>
                 </div>
             </div>
         </div>
