@@ -1,12 +1,18 @@
 /**
- * SkynetStore — Visit Tracker
- * Compteur de visites du site et suivi des produits les plus visités
- * Stockage hybride : localStorage + Firebase (incréments atomiques)
+ * SkynetStore — Visit Tracker (Realtime Database)
+ * Compteur de visites en temps réel via Firebase RTDB
+ * Fallback localStorage si Firebase indisponible
  */
 const Visits = (() => {
     const STORAGE_KEY = 'skynet-visits';
 
-    function getData() {
+    function isRtdbReady() {
+        return typeof rtdb !== 'undefined' && typeof firebase !== 'undefined' &&
+               firebase.apps.length > 0 && firebaseConfig.apiKey !== 'VOTRE_API_KEY';
+    }
+
+    // ===== LOCAL STORAGE FALLBACK =====
+    function getLocal() {
         return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{"total":0,"pages":{},"products":{}}');
     }
 
@@ -14,39 +20,41 @@ const Visits = (() => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
 
+    // ===== RTDB ATOMIC INCREMENTS =====
     function trackPage() {
-        const data = getData();
+        const page = window.location.pathname.replace(/[./#$\[\]]/g, '_');
+        // Local
+        const data = getLocal();
         data.total++;
-        const page = window.location.pathname;
         data.pages[page] = (data.pages[page] || 0) + 1;
         saveLocal(data);
-        // Firebase atomic increment
-        if (typeof FirebaseDB !== 'undefined' && typeof FirebaseDB.incrementVisit === 'function') {
-            FirebaseDB.incrementVisit(page, null).catch(() => {});
+        // RTDB
+        if (isRtdbReady()) {
+            rtdb.ref('visits/total').set(firebase.database.ServerValue.increment(1));
+            rtdb.ref('visits/pages/' + page).set(firebase.database.ServerValue.increment(1));
         }
     }
 
     function trackProduct(productId) {
         if (!productId) return;
-        const data = getData();
+        // Local
+        const data = getLocal();
         data.products[productId] = (data.products[productId] || 0) + 1;
         saveLocal(data);
-        // Firebase atomic increment
-        if (typeof FirebaseDB !== 'undefined' && typeof FirebaseDB.incrementVisit === 'function') {
-            FirebaseDB.incrementVisit(null, productId).catch(() => {});
+        // RTDB
+        if (isRtdbReady()) {
+            rtdb.ref('visits/total').set(firebase.database.ServerValue.increment(1));
+            rtdb.ref('visits/products/' + productId).set(firebase.database.ServerValue.increment(1));
         }
     }
 
+    // ===== LECTURE LOCALE =====
     function getTotal() {
-        return getData().total;
-    }
-
-    function getProductVisits() {
-        return getData().products;
+        return getLocal().total;
     }
 
     function getMostVisitedProducts(limit) {
-        const products = getData().products;
+        const products = getLocal().products;
         return Object.entries(products)
             .map(([id, count]) => ({ id: parseInt(id), visits: count }))
             .sort((a, b) => b.visits - a.visits)
@@ -54,22 +62,18 @@ const Visits = (() => {
     }
 
     function getStats() {
-        const data = getData();
-        return {
-            total: data.total,
-            pages: data.pages,
-            products: data.products
-        };
+        return getLocal();
     }
 
-    // Charge les stats depuis Firebase (pour le dashboard admin)
+    // ===== LECTURE FIREBASE RTDB =====
     async function loadFromFirebase() {
-        if (typeof FirebaseDB === 'undefined' || typeof FirebaseDB.getVisits !== 'function') return null;
+        if (!isRtdbReady()) return null;
         try {
-            const fbData = await FirebaseDB.getVisits();
+            const snapshot = await rtdb.ref('visits').once('value');
+            const fbData = snapshot.val();
             if (!fbData) return null;
-            // Merge Firebase data into localStorage
-            const local = getData();
+            // Merge: Firebase = source de vérité
+            const local = getLocal();
             local.total = Math.max(local.total, fbData.total || 0);
             if (fbData.products) {
                 for (const [id, count] of Object.entries(fbData.products)) {
@@ -89,8 +93,26 @@ const Visits = (() => {
         }
     }
 
+    // ===== ÉCOUTE TEMPS RÉEL (pour le dashboard admin) =====
+    function onTotalChange(callback) {
+        if (!isRtdbReady()) return () => {};
+        const ref = rtdb.ref('visits/total');
+        ref.on('value', snap => callback(snap.val() || 0));
+        return () => ref.off('value');
+    }
+
+    function onProductsChange(callback) {
+        if (!isRtdbReady()) return () => {};
+        const ref = rtdb.ref('visits/products');
+        ref.on('value', snap => callback(snap.val() || {}));
+        return () => ref.off('value');
+    }
+
     // Track current page on load
     trackPage();
 
-    return { trackProduct, getTotal, getProductVisits, getMostVisitedProducts, getStats, loadFromFirebase };
+    return {
+        trackProduct, getTotal, getMostVisitedProducts, getStats,
+        loadFromFirebase, onTotalChange, onProductsChange
+    };
 })();
