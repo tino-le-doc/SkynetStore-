@@ -120,6 +120,30 @@ document.addEventListener('DOMContentLoaded', () => {
             `).join('');
         }
 
+        // Visits
+        if (typeof Visits !== 'undefined') {
+            document.getElementById('stat-visits').textContent = Visits.getTotal().toLocaleString('fr-FR');
+
+            const mostVisited = Visits.getMostVisitedProducts(5);
+            const mvEl = document.getElementById('most-visited-products');
+            if (mostVisited.length === 0) {
+                mvEl.innerHTML = '<p class="empty-state">Aucune donnée de visite pour le moment.</p>';
+            } else {
+                mvEl.innerHTML = mostVisited.map(mv => {
+                    const p = products.find(x => x.id === mv.id);
+                    if (!p) return '';
+                    return `
+                        <div class="popular-item">
+                            <div class="popular-item-icon">${p.image ? `<img src="${p.image}" alt="" style="width:40px;height:40px;object-fit:contain;border-radius:6px;">` : (p.emoji || '📦')}</div>
+                            <div class="popular-item-info">
+                                <div class="popular-item-name">${escapeHTML(p.name)}</div>
+                                <div class="popular-item-price" style="color:var(--text-secondary);">${mv.visits} visite${mv.visits > 1 ? 's' : ''}</div>
+                            </div>
+                        </div>`;
+                }).join('');
+            }
+        }
+
         // Recent orders
         const recentOrdersEl = document.getElementById('recent-orders');
         const recent = orders.slice(-5).reverse();
