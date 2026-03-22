@@ -1,28 +1,28 @@
 /* ============================
-   SkynetStore — Dark Futuristic Theme
+   SkynetStore — Light Green & White Theme
    ============================ */
 
 :root {
-    --bg-primary: #0a0a0f;
-    --bg-secondary: #12121a;
-    --bg-card: #1a1a2e;
-    --bg-card-hover: #222240;
-    --accent: #ff6b00;
-    --accent-light: #ff8c33;
-    --accent-glow: rgba(255, 107, 0, 0.3);
-    --cyan: #00d4ff;
-    --green: #00e676;
-    --pink: #ff6b9d;
-    --text-primary: #f0f0f5;
-    --text-secondary: #9999b3;
-    --text-muted: #666680;
-    --border: #2a2a40;
-    --border-light: #3a3a55;
+    --bg-primary: #f0faf0;
+    --bg-secondary: #e8f5e9;
+    --bg-card: rgba(255, 255, 255, 0.85);
+    --bg-card-hover: rgba(232, 245, 233, 0.9);
+    --accent: #2e7d32;
+    --accent-light: #388e3c;
+    --accent-glow: rgba(46, 125, 50, 0.2);
+    --cyan: #00897b;
+    --green: #2e7d32;
+    --pink: #e91e63;
+    --text-primary: #1a2e1a;
+    --text-secondary: #5a7a5a;
+    --text-muted: #8a9e8a;
+    --border: rgba(46, 125, 50, 0.15);
+    --border-light: rgba(46, 125, 50, 0.25);
     --radius: 12px;
     --radius-sm: 8px;
     --radius-lg: 20px;
-    --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-    --shadow-glow: 0 0 30px rgba(255, 107, 0, 0.15);
+    --shadow: 0 4px 24px rgba(46, 125, 50, 0.08);
+    --shadow-glow: 0 0 30px rgba(46, 125, 50, 0.15);
     --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
@@ -41,7 +41,13 @@ html {
 
 body {
     font-family: var(--font);
-    background: var(--bg-primary);
+    background:
+        radial-gradient(ellipse at 20% 0%, rgba(144, 238, 144, 0.35) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(255, 255, 255, 0.9) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(162, 232, 162, 0.3) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 90%, rgba(200, 255, 200, 0.4) 0%, transparent 40%),
+        linear-gradient(160deg, #ffffff 0%, #e8f5e9 30%, #f1faf1 50%, #c8e6c9 75%, #ffffff 100%);
+    background-attachment: fixed;
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
@@ -77,7 +83,7 @@ img {
     left: 0;
     right: 0;
     z-index: 1000;
-    background: rgba(10, 10, 15, 0.85);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
     transition: background var(--transition);
@@ -260,8 +266,8 @@ img {
     position: absolute;
     inset: 0;
     background-image:
-        linear-gradient(rgba(108, 99, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(108, 99, 255, 0.05) 1px, transparent 1px);
+        linear-gradient(rgba(46, 125, 50, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(46, 125, 50, 0.06) 1px, transparent 1px);
     background-size: 60px 60px;
     mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent);
 }
@@ -289,12 +295,12 @@ img {
 .hero-badge {
     display: inline-block;
     padding: 8px 20px;
-    background: rgba(108, 99, 255, 0.1);
-    border: 1px solid rgba(108, 99, 255, 0.3);
+    background: rgba(46, 125, 50, 0.1);
+    border: 1px solid rgba(46, 125, 50, 0.3);
     border-radius: 50px;
     font-size: 0.85rem;
     font-weight: 500;
-    color: var(--accent-light);
+    color: var(--accent);
     margin-bottom: 24px;
 }
 
@@ -307,7 +313,7 @@ img {
 }
 
 .gradient-text {
-    background: linear-gradient(135deg, var(--accent), var(--cyan));
+    background: linear-gradient(135deg, var(--accent), #43a047);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -358,7 +364,7 @@ img {
 .page-hero {
     padding: 120px 0 40px;
     text-align: center;
-    background: linear-gradient(180deg, rgba(108, 99, 255, 0.05), transparent);
+    background: linear-gradient(180deg, rgba(46, 125, 50, 0.06), transparent);
 }
 
 .page-title {
@@ -692,7 +698,7 @@ img {
 .product-category-badge {
     display: inline-block;
     padding: 4px 12px;
-    background: rgba(108, 99, 255, 0.1);
+    background: rgba(46, 125, 50, 0.1);
     color: var(--accent);
     border-radius: 50px;
     font-size: 0.75rem;
@@ -874,7 +880,8 @@ img {
    Newsletter
    ============================ */
 .newsletter-inner {
-    background: linear-gradient(135deg, var(--bg-card), var(--bg-card-hover));
+    background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(232,245,233,0.8));
+    backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 60px 40px;
@@ -978,7 +985,7 @@ img {
    Footer
    ============================ */
 .footer {
-    background: var(--bg-secondary);
+    background: linear-gradient(180deg, #e8f5e9, #ffffff);
     border-top: 1px solid var(--border);
     padding: 60px 0 0;
 }
@@ -1028,7 +1035,8 @@ img {
 .cart-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(4px);
     z-index: 2000;
     opacity: 0;
     pointer-events: none;
@@ -1047,8 +1055,9 @@ img {
     width: 400px;
     max-width: 90vw;
     height: 100vh;
-    background: var(--bg-secondary);
+    background: #ffffff;
     border-left: 1px solid var(--border);
+    box-shadow: -4px 0 30px rgba(46, 125, 50, 0.08);
     z-index: 2001;
     display: flex;
     flex-direction: column;
@@ -1274,7 +1283,7 @@ img {
 .payment-option.active,
 .payment-option:has(input:checked) {
     border-color: var(--accent);
-    background: rgba(108, 99, 255, 0.1);
+    background: rgba(46, 125, 50, 0.1);
 }
 
 .payment-option input {
@@ -1374,7 +1383,8 @@ img {
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(4px);
     z-index: 3000;
     display: flex;
     align-items: center;
@@ -1383,13 +1393,14 @@ img {
 }
 
 .modal {
-    background: var(--bg-secondary);
+    background: #ffffff;
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 48px;
     text-align: center;
     max-width: 480px;
     width: 100%;
+    box-shadow: 0 8px 40px rgba(46, 125, 50, 0.12);
 }
 
 .modal-icon {
@@ -1429,7 +1440,8 @@ img {
         top: 70px;
         left: 0;
         right: 0;
-        background: var(--bg-secondary);
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(12px);
         flex-direction: column;
         padding: 20px;
         gap: 12px;
