@@ -140,17 +140,23 @@ const Auth = (() => {
                 const doc = await db.collection('users').doc(uid).get();
                 if (doc.exists) {
                     const profile = doc.data();
+                    // S'assurer que l'admin a le bon rôle
+                    if (email === ADMIN_ACCOUNT.email && profile.role !== 'admin') {
+                        profile.role = 'admin';
+                        await db.collection('users').doc(uid).update({ role: 'admin' });
+                    }
                     saveSession(profile);
                     return { ok: true, user: profile };
                 }
 
                 // Profile not found in Firestore — build from auth
+                const isAdmin = email === ADMIN_ACCOUNT.email;
                 const profile = {
                     id: uid,
-                    firstName: cred.user.displayName || email.split('@')[0],
-                    lastName: '',
+                    firstName: isAdmin ? 'Admin' : (cred.user.displayName || email.split('@')[0]),
+                    lastName: isAdmin ? 'SkynetStore' : '',
                     email: email,
-                    role: 'customer',
+                    role: isAdmin ? 'admin' : 'customer',
                     createdAt: new Date().toISOString()
                 };
                 await db.collection('users').doc(uid).set(profile);
