@@ -444,7 +444,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadSettings() {
         const defaults = {
             storeName: 'SkynetStore',
-            email: 'contact@skynetstore.com',
+            email: 'contact@skynetstore.eu',
             phone: '+33 1 23 45 67 89',
             freeShipping: 50,
             shippingFee: 4.99

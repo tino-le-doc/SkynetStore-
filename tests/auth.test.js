@@ -42,20 +42,20 @@ describe('Auth — Admin account', () => {
     });
 
     test('admin login with correct credentials', () => {
-        const result = Auth.login('admin@skynetstore.com', 'admin123');
+        const result = Auth.login('admin@skynetstore.eu', 'admin123');
         expect(result.ok).toBe(true);
         expect(result.user.role).toBe('admin');
         expect(result.user.firstName).toBe('Admin');
     });
 
     test('admin login with wrong password fails', () => {
-        const result = Auth.login('admin@skynetstore.com', 'wrongpassword');
+        const result = Auth.login('admin@skynetstore.eu', 'wrongpassword');
         expect(result.ok).toBe(false);
         expect(result.error).toBeTruthy();
     });
 
     test('isAdmin returns true after admin login', () => {
-        Auth.login('admin@skynetstore.com', 'admin123');
+        Auth.login('admin@skynetstore.eu', 'admin123');
         expect(Auth.isAdmin()).toBe(true);
     });
 
@@ -104,7 +104,7 @@ describe('Auth — Customer registration', () => {
         const result = Auth.register({
             firstName: 'Fake',
             lastName: 'Admin',
-            email: 'admin@skynetstore.com',
+            email: 'admin@skynetstore.eu',
             password: 'hacker'
         });
         expect(result.ok).toBe(false);
@@ -173,7 +173,7 @@ describe('Auth — Session management', () => {
     });
 
     test('logout clears session', () => {
-        Auth.login('admin@skynetstore.com', 'admin123');
+        Auth.login('admin@skynetstore.eu', 'admin123');
         expect(Auth.isLoggedIn()).toBe(true);
         Auth.logout();
         expect(Auth.isLoggedIn()).toBe(false);
@@ -181,7 +181,7 @@ describe('Auth — Session management', () => {
     });
 
     test('session does not include password', () => {
-        Auth.login('admin@skynetstore.com', 'admin123');
+        Auth.login('admin@skynetstore.eu', 'admin123');
         const user = Auth.getCurrentUser();
         expect(user.password).toBeUndefined();
     });
