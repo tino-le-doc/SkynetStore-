@@ -81,7 +81,9 @@
         }
         .invoice-table thead th:last-child,
         .invoice-table thead th:nth-child(3),
-        .invoice-table thead th:nth-child(4) { text-align: right; }
+        .invoice-table thead th:nth-child(4),
+        .invoice-table thead th:nth-child(5),
+        .invoice-table thead th:nth-child(6) { text-align: right; }
         .invoice-table tbody td {
             padding: 14px 16px;
             border-bottom: 1px solid #f0f0f0;
@@ -90,7 +92,9 @@
         }
         .invoice-table tbody td:last-child,
         .invoice-table tbody td:nth-child(3),
-        .invoice-table tbody td:nth-child(4) { text-align: right; font-family: 'JetBrains Mono', monospace; }
+        .invoice-table tbody td:nth-child(4),
+        .invoice-table tbody td:nth-child(5),
+        .invoice-table tbody td:nth-child(6) { text-align: right; font-family: 'JetBrains Mono', monospace; }
         .invoice-table tbody td:nth-child(2) { color: #666; font-size: 0.85rem; }
 
         .invoice-totals {
@@ -117,6 +121,40 @@
             color: #111;
         }
         .invoice-totals tr.total td:last-child { color: #00b894; }
+
+        .invoice-payment-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .invoice-payment-info h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #999;
+            margin-bottom: 6px;
+        }
+        .invoice-payment-info p {
+            font-size: 0.88rem;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .invoice-legal {
+            margin-bottom: 24px;
+            padding: 16px 20px;
+            background: #fffdf0;
+            border: 1px solid #f0e6b8;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            color: #665;
+            line-height: 1.6;
+        }
+        .invoice-legal strong { color: #444; }
 
         .invoice-footer {
             border-top: 1px solid #eee;
@@ -225,6 +263,7 @@
                 </div>
                 <div class="footer-links">
                     <h4>Informations</h4>
+                    <a href="mentions-legales.html">Mentions Legales</a>
                     <a href="cgv.html">Conditions Generales</a>
                     <a href="cgv.html#confidentialite">Confidentialite</a>
                     <a href="faq.html">FAQ</a>
@@ -270,6 +309,7 @@
     <script src="../js/search.js"></script>
     <script src="../js/visits.js"></script>
     <script src="../js/app.js"></script>
+    <script src="../js/cookie-consent.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         const container = document.getElementById('invoice-content');
@@ -290,29 +330,41 @@
             return;
         }
 
-        // Resolve product details
-        const itemsHTML = (order.items || []).map(item => {
+        // TVA rate (20% standard rate for electronics in France)
+        const TVA_RATE = 0.20;
+
+        // Resolve product details with HT/TVA breakdown per line
+        const resolvedItems = (order.items || []).map(item => {
             const product = PRODUCTS.find(p => p.id === item.id);
-            if (!product) return '';
-            const lineTotal = product.price * item.qty;
-            return `
-                <tr>
-                    <td>${product.name}</td>
-                    <td>${product.categoryLabel || ''}</td>
-                    <td>${item.qty}</td>
-                    <td>${formatPrice(product.price)}</td>
-                    <td>${formatPrice(lineTotal)}</td>
-                </tr>
-            `;
-        }).join('');
+            if (!product) return null;
+            const totalTTC = product.price * item.qty;
+            const totalHT = totalTTC / (1 + TVA_RATE);
+            const totalTVA = totalTTC - totalHT;
+            const unitHT = product.price / (1 + TVA_RATE);
+            return { product, qty: item.qty, unitHT, totalHT, totalTVA, totalTTC };
+        }).filter(Boolean);
+
+        const itemsHTML = resolvedItems.map(item => `
+            <tr>
+                <td>${item.product.name}</td>
+                <td>${item.qty}</td>
+                <td>${formatPrice(item.unitHT)}</td>
+                <td>20%</td>
+                <td>${formatPrice(item.totalHT)}</td>
+                <td>${formatPrice(item.totalTTC)}</td>
+            </tr>
+        `).join('');
 
         // Calculate totals
-        const subtotal = (order.items || []).reduce((sum, item) => {
-            const product = PRODUCTS.find(p => p.id === item.id);
-            return sum + (product ? product.price * item.qty : 0);
-        }, 0);
-        const shipping = subtotal >= 50 ? 0 : 4.99;
-        const total = order.total || (subtotal + shipping);
+        const subtotalTTC = resolvedItems.reduce((sum, i) => sum + i.totalTTC, 0);
+        const subtotalHT = resolvedItems.reduce((sum, i) => sum + i.totalHT, 0);
+        const totalTVA = resolvedItems.reduce((sum, i) => sum + i.totalTVA, 0);
+        const shipping = order.shipping !== undefined ? order.shipping : (subtotalTTC >= 50 ? 0 : 4.99);
+        const shippingHT = shipping / (1 + TVA_RATE);
+        const shippingTVA = shipping - shippingHT;
+        const totalHT = subtotalHT + shippingHT;
+        const grandTotalTVA = totalTVA + shippingTVA;
+        const totalTTC = order.total || (subtotalTTC + shipping);
 
         // Determine status
         const statusLabels = {
@@ -324,11 +376,14 @@
             'cancelled': 'Annulée'
         };
         const isPaid = ['confirmed', 'processing', 'shipped', 'delivered'].includes(order.status);
-        const statusLabel = statusLabels[order.status] || 'En attente';
 
-        // Format date
+        // Format dates
         const orderDate = new Date(order.date);
         const dateStr = orderDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+        // Due date: 30 days after order
+        const dueDate = new Date(orderDate);
+        dueDate.setDate(dueDate.getDate() + 30);
+        const dueDateStr = dueDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 
         // Invoice number derived from order number
         const invoiceNum = 'FA-' + order.id.replace('SK-', '');
@@ -336,7 +391,15 @@
         // Customer info
         const customerName = order.customerName || 'Client';
         const customerEmail = order.customerEmail || '';
+        const customerPhone = order.customerPhone || '';
         const shippingAddress = order.shippingAddress || null;
+
+        // Payment method labels
+        const paymentLabels = { card: 'Carte bancaire', paypal: 'PayPal', apple_pay: 'Apple Pay' };
+        const paymentMethod = paymentLabels[order.paymentMethod] || order.paymentMethod || 'Carte bancaire';
+
+        // Nature of operation
+        const natureOp = 'Livraison de biens';
 
         container.innerHTML = `
             <div class="invoice" id="invoice-printable">
@@ -344,10 +407,14 @@
                     <div class="invoice-brand">
                         <a class="logo"><span class="logo-icon">⬡</span> SkynetStore</a>
                         <p>
+                            SAS au capital de 10 000 €<br>
                             42 Rue de l'Innovation<br>
                             75001 Paris, France<br>
-                            support@skynetstore.eu<br>
-                            +33 1 23 45 67 89
+                            <strong>SIREN :</strong> 123 456 789<br>
+                            <strong>SIRET :</strong> 123 456 789 00001<br>
+                            <strong>N° TVA Intracom. :</strong> FR 12 345678900<br>
+                            <strong>RCS :</strong> Paris B 123 456 789<br>
+                            support@skynetstore.eu | +33 1 23 45 67 89
                         </p>
                     </div>
                     <div class="invoice-meta">
@@ -355,7 +422,9 @@
                         <p>
                             <strong>N° ${invoiceNum}</strong><br>
                             Commande : ${order.id}<br>
-                            Date : ${dateStr}<br>
+                            Date d'émission : ${dateStr}<br>
+                            Date d'échéance : ${dueDateStr}<br>
+                            Nature : ${natureOp}<br>
                             Statut : <span class="invoice-status ${isPaid ? 'paid' : 'pending'}">${isPaid ? 'Payée' : 'En attente'}</span>
                         </p>
                     </div>
@@ -367,14 +436,15 @@
                         <strong>${customerName}</strong>
                         <p>
                             ${customerEmail ? customerEmail + '<br>' : ''}
+                            ${customerPhone ? customerPhone + '<br>' : ''}
                             ${shippingAddress ? shippingAddress.address + '<br>' + shippingAddress.postal + ' ' + shippingAddress.city + '<br>' + shippingAddress.country : ''}
                         </p>
                     </div>
                     <div class="invoice-party">
-                        <h4>Livré à</h4>
+                        <h4>Adresse de livraison</h4>
                         <strong>${customerName}</strong>
                         <p>
-                            ${shippingAddress ? shippingAddress.address + '<br>' + shippingAddress.postal + ' ' + shippingAddress.city + '<br>' + shippingAddress.country : 'Adresse de livraison'}
+                            ${shippingAddress ? shippingAddress.address + '<br>' + shippingAddress.postal + ' ' + shippingAddress.city + '<br>' + shippingAddress.country : 'Identique à l\'adresse de facturation'}
                         </p>
                     </div>
                 </div>
@@ -382,42 +452,74 @@
                 <table class="invoice-table">
                     <thead>
                         <tr>
-                            <th>Produit</th>
-                            <th>Catégorie</th>
+                            <th>Désignation</th>
                             <th>Qté</th>
-                            <th>Prix unit.</th>
-                            <th>Total</th>
+                            <th>P.U. HT</th>
+                            <th>TVA</th>
+                            <th>Total HT</th>
+                            <th>Total TTC</th>
                         </tr>
                     </thead>
                     <tbody>
                         ${itemsHTML}
+                        ${shipping > 0 ? `
+                        <tr>
+                            <td>Frais de livraison</td>
+                            <td>1</td>
+                            <td>${formatPrice(shippingHT)}</td>
+                            <td>20%</td>
+                            <td>${formatPrice(shippingHT)}</td>
+                            <td>${formatPrice(shipping)}</td>
+                        </tr>
+                        ` : `
+                        <tr>
+                            <td>Frais de livraison</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td colspan="2" style="text-align:right;">Offerts</td>
+                        </tr>
+                        `}
                     </tbody>
                 </table>
 
                 <div class="invoice-totals">
                     <table>
                         <tr>
-                            <td>Sous-total</td>
-                            <td>${formatPrice(subtotal)}</td>
+                            <td>Total HT</td>
+                            <td>${formatPrice(totalHT)}</td>
                         </tr>
                         <tr>
-                            <td>Livraison</td>
-                            <td>${shipping === 0 ? 'Gratuite' : formatPrice(shipping)}</td>
-                        </tr>
-                        <tr>
-                            <td>TVA (incluse)</td>
-                            <td>${formatPrice(total * 0.2 / 1.2)}</td>
+                            <td>TVA 20%</td>
+                            <td>${formatPrice(grandTotalTVA)}</td>
                         </tr>
                         <tr class="total">
                             <td>Total TTC</td>
-                            <td>${formatPrice(total)}</td>
+                            <td>${formatPrice(totalTTC)}</td>
                         </tr>
                     </table>
                 </div>
 
+                <div class="invoice-payment-info">
+                    <div>
+                        <h4>Moyen de paiement</h4>
+                        <p>${paymentMethod}</p>
+                    </div>
+                    <div>
+                        <h4>Conditions de paiement</h4>
+                        <p>Paiement comptant à la commande.<br>Date d'échéance : ${dueDateStr}</p>
+                    </div>
+                </div>
+
+                <div class="invoice-legal">
+                    <strong>Mentions légales :</strong> En cas de retard de paiement, une pénalité de 3 fois le taux d'intérêt légal sera appliquée, conformément à l'article L.441-10 du Code de commerce. Une indemnité forfaitaire de 40 € pour frais de recouvrement sera également due (art. D.441-5 du Code de commerce). Pas d'escompte pour paiement anticipé. Les produits restent la propriété du vendeur jusqu'au paiement intégral (clause de réserve de propriété, art. 2367 du Code civil).
+                </div>
+
                 <div class="invoice-footer">
                     <p>
-                        SkynetStore — SIRET : 123 456 789 00001 — TVA : FR12345678900<br>
+                        <strong>SkynetStore SAS</strong> — Capital social : 10 000 € — SIREN : 123 456 789 — SIRET : 123 456 789 00001<br>
+                        N° TVA Intracommunautaire : FR 12 345678900 — RCS Paris B 123 456 789<br>
+                        Facture conforme aux articles 289 et 242 nonies A de l'annexe II du CGI.<br>
                         Merci pour votre confiance. Conservez cette facture pour vos dossiers.
                     </p>
                 </div>
