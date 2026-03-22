@@ -28,6 +28,9 @@
             <a href="#customers" class="sidebar-link" data-page="customers">
                 <span class="sidebar-icon">👥</span> Clients
             </a>
+            <a href="#supplier" class="sidebar-link" data-page="supplier">
+                <span class="sidebar-icon">🔗</span> Fournisseur
+            </a>
             <a href="#settings" class="sidebar-link" data-page="settings">
                 <span class="sidebar-icon">⚙️</span> Paramètres
             </a>
@@ -183,6 +186,186 @@
                 </div>
             </div>
         </section>
+
+        <!-- ===== SUPPLIER / FOURNISSEUR ===== -->
+        <section class="page" id="page-supplier">
+            <div class="page-header">
+                <h1>Fournisseur AliExpress</h1>
+            </div>
+
+            <!-- Stats fournisseur -->
+            <div class="stats-grid" id="supplier-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">🔗</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-mapped">0</span>
+                        <span class="stat-label">Produits liés</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📤</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-supplier-orders">0</span>
+                        <span class="stat-label">Commandes fournisseur</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💸</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-total-cost">0,00 €</span>
+                        <span class="stat-label">Coût total</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-total-profit">0,00 €</span>
+                        <span class="stat-label">Marge totale</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-grid">
+                <!-- Configuration fournisseur -->
+                <div class="card">
+                    <div class="card-header"><h2>Configuration</h2></div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Plateforme</label>
+                            <select id="supplier-platform" class="form-input">
+                                <option value="aliexpress">AliExpress</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Mode</label>
+                            <select id="supplier-mode" class="form-input">
+                                <option value="simulation">Simulation (test)</option>
+                                <option value="live">API réelle (production)</option>
+                            </select>
+                        </div>
+                        <div class="form-group form-checkbox">
+                            <label><input type="checkbox" id="supplier-auto-forward" checked> Transmission automatique des commandes</label>
+                        </div>
+                        <div class="form-group" id="api-key-group" style="display:none;">
+                            <label>Clé API</label>
+                            <input type="password" id="supplier-api-key" class="form-input" placeholder="Votre clé API AliExpress">
+                        </div>
+                        <div class="form-group" id="api-secret-group" style="display:none;">
+                            <label>Secret API</label>
+                            <input type="password" id="supplier-api-secret" class="form-input" placeholder="Votre secret API">
+                        </div>
+                        <button class="btn btn-primary" id="save-supplier-config-btn">Enregistrer la configuration</button>
+                    </div>
+                </div>
+
+                <!-- Info mode -->
+                <div class="card">
+                    <div class="card-header"><h2>Comment ça marche</h2></div>
+                    <div class="card-body">
+                        <p class="text-secondary" style="line-height:1.8;">
+                            <strong>1.</strong> Liez chaque produit à son équivalent AliExpress ci-dessous.<br>
+                            <strong>2.</strong> Quand un client passe commande, elle est automatiquement transmise au fournisseur.<br>
+                            <strong>3.</strong> Suivez le statut des commandes fournisseur et les numéros de tracking.<br>
+                            <strong>4.</strong> En mode <em>simulation</em>, tout fonctionne sans appel API réel.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mapping produits -->
+            <div class="card" style="margin-top:24px;">
+                <div class="card-header">
+                    <h2>Liaison Produits — AliExpress</h2>
+                </div>
+                <div class="table-wrapper">
+                    <table class="admin-table" id="supplier-mapping-table">
+                        <thead>
+                            <tr>
+                                <th>Produit</th>
+                                <th>Prix de vente</th>
+                                <th>ID AliExpress</th>
+                                <th>Prix fournisseur</th>
+                                <th>Marge</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="supplier-mapping-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Commandes fournisseur -->
+            <div class="card" style="margin-top:24px;">
+                <div class="card-header">
+                    <h2>Commandes Fournisseur</h2>
+                </div>
+                <div class="table-wrapper">
+                    <table class="admin-table" id="supplier-orders-table">
+                        <thead>
+                            <tr>
+                                <th>Commande Site</th>
+                                <th>ID Fournisseur</th>
+                                <th>Coût</th>
+                                <th>Marge</th>
+                                <th>Tracking</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="supplier-orders-body"></tbody>
+                    </table>
+                </div>
+                <p class="empty-state" id="supplier-orders-empty">Aucune commande fournisseur pour le moment.</p>
+            </div>
+        </section>
+
+        <!-- ===== SUPPLIER MAPPING MODAL ===== -->
+        <div class="modal-overlay" id="supplier-modal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2 id="supplier-modal-title">Lier au fournisseur</h2>
+                    <button class="modal-close" id="supplier-modal-close">&times;</button>
+                </div>
+                <form id="supplier-mapping-form" class="modal-body">
+                    <input type="hidden" id="supplier-edit-product-id">
+                    <div class="form-group">
+                        <label>Produit</label>
+                        <input type="text" id="supplier-edit-product-name" class="form-input" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>ID Produit AliExpress</label>
+                        <input type="text" id="supplier-edit-id" class="form-input" placeholder="Ex: 1005006123456789" required>
+                    </div>
+                    <div class="form-group">
+                        <label>URL AliExpress</label>
+                        <input type="url" id="supplier-edit-url" class="form-input" placeholder="https://aliexpress.com/item/...">
+                    </div>
+                    <div class="form-group">
+                        <label>SKU Fournisseur</label>
+                        <input type="text" id="supplier-edit-sku" class="form-input" placeholder="Ex: SKU-VARIANT-001">
+                    </div>
+                    <div class="form-group">
+                        <label>Prix fournisseur (€)</label>
+                        <input type="number" id="supplier-edit-price" step="0.01" min="0" class="form-input" required>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" id="supplier-modal-cancel">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ===== SUPPLIER ORDER DETAIL MODAL ===== -->
+        <div class="modal-overlay" id="supplier-order-modal">
+            <div class="modal modal-wide">
+                <div class="modal-header">
+                    <h2 id="supplier-order-modal-title">Détail commande fournisseur</h2>
+                    <button class="modal-close" id="supplier-order-modal-close">&times;</button>
+                </div>
+                <div class="modal-body" id="supplier-order-modal-body"></div>
+            </div>
+        </div>
 
         <!-- ===== SETTINGS ===== -->
         <section class="page" id="page-settings">
@@ -358,6 +541,7 @@
 
     <script src="../js/products.js"></script>
     <script src="../js/auth.js"></script>
+    <script src="../js/supplier.js"></script>
     <script src="admin.js"></script>
 </body>
 </html>

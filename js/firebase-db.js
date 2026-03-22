@@ -225,6 +225,87 @@ const FirebaseDB = (() => {
         }
     }
 
+    // ========================
+    // SUPPLIER (Fournisseur)
+    // ========================
+    async function getSupplierMappings() {
+        if (!isFirebaseReady()) return null;
+        try {
+            const snapshot = await db.collection('supplierMappings').get();
+            if (snapshot.empty) return [];
+            return snapshot.docs.map(doc => ({ _docId: doc.id, ...doc.data() }));
+        } catch (e) {
+            console.warn('FirebaseDB.getSupplierMappings error:', e);
+            return null;
+        }
+    }
+
+    async function saveSupplierMappings(mappings) {
+        if (!isFirebaseReady()) return false;
+        try {
+            const batch = db.batch();
+            mappings.forEach(m => {
+                const ref = db.collection('supplierMappings').doc(String(m.productId));
+                batch.set(ref, m);
+            });
+            await batch.commit();
+            return true;
+        } catch (e) {
+            console.warn('FirebaseDB.saveSupplierMappings error:', e);
+            return false;
+        }
+    }
+
+    async function getSupplierOrders() {
+        if (!isFirebaseReady()) return null;
+        try {
+            const snapshot = await db.collection('supplierOrders').orderBy('createdAt', 'desc').get();
+            if (snapshot.empty) return [];
+            return snapshot.docs.map(doc => ({ _docId: doc.id, ...doc.data() }));
+        } catch (e) {
+            console.warn('FirebaseDB.getSupplierOrders error:', e);
+            return null;
+        }
+    }
+
+    async function saveSupplierOrders(orders) {
+        if (!isFirebaseReady()) return false;
+        try {
+            const batch = db.batch();
+            orders.forEach(o => {
+                const ref = db.collection('supplierOrders').doc(o.orderId);
+                batch.set(ref, o);
+            });
+            await batch.commit();
+            return true;
+        } catch (e) {
+            console.warn('FirebaseDB.saveSupplierOrders error:', e);
+            return false;
+        }
+    }
+
+    async function saveSupplierConfig(config) {
+        if (!isFirebaseReady()) return false;
+        try {
+            await db.collection('config').doc('supplier').set(config);
+            return true;
+        } catch (e) {
+            console.warn('FirebaseDB.saveSupplierConfig error:', e);
+            return false;
+        }
+    }
+
+    async function getSupplierConfig() {
+        if (!isFirebaseReady()) return null;
+        try {
+            const doc = await db.collection('config').doc('supplier').get();
+            return doc.exists ? doc.data() : null;
+        } catch (e) {
+            console.warn('FirebaseDB.getSupplierConfig error:', e);
+            return null;
+        }
+    }
+
     return {
         isFirebaseReady,
         // Products
@@ -236,6 +317,10 @@ const FirebaseDB = (() => {
         // Settings
         getSettings, saveSettings,
         // Cart
-        getCart, saveCart
+        getCart, saveCart,
+        // Supplier
+        getSupplierMappings, saveSupplierMappings,
+        getSupplierOrders, saveSupplierOrders,
+        getSupplierConfig, saveSupplierConfig
     };
 })();

@@ -60,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (pageId === 'products') renderProductsTable();
         if (pageId === 'orders') renderOrders();
         if (pageId === 'customers') renderCustomers();
+        if (pageId === 'supplier') refreshSupplierPage();
     }
 
     navLinks.forEach(link => {
@@ -502,6 +503,242 @@ document.addEventListener('DOMContentLoaded', () => {
             refreshDashboard();
             alert('Données réinitialisées.');
         }
+    });
+
+    // ===== SUPPLIER / FOURNISSEUR =====
+    const supplierModal = document.getElementById('supplier-modal');
+    const supplierOrderModal = document.getElementById('supplier-order-modal');
+    const supplierForm = document.getElementById('supplier-mapping-form');
+
+    function refreshSupplierPage() {
+        products = loadProducts();
+        renderSupplierStats();
+        renderSupplierMappings();
+        renderSupplierOrders();
+        loadSupplierConfig();
+    }
+
+    function renderSupplierStats() {
+        if (typeof Supplier === 'undefined') return;
+        const stats = Supplier.getStats();
+        document.getElementById('stat-mapped').textContent = stats.mappedProducts;
+        document.getElementById('stat-supplier-orders').textContent = stats.totalOrders;
+        document.getElementById('stat-total-cost').textContent = formatPrice(stats.totalCost);
+        document.getElementById('stat-total-profit').textContent = formatPrice(stats.totalProfit);
+    }
+
+    function renderSupplierMappings() {
+        if (typeof Supplier === 'undefined') return;
+        const mappingsBody = document.getElementById('supplier-mapping-body');
+        mappingsBody.innerHTML = products.map(p => {
+            const mapping = Supplier.getMapping(p.id);
+            const marginInfo = Supplier.getMargin(p.id);
+            const linked = !!mapping;
+            const marginDisplay = marginInfo
+                ? `<span style="color:var(--green);font-weight:600;">${formatPrice(marginInfo.margin)} (${marginInfo.marginPercent.toFixed(1)}%)</span>`
+                : '<span style="color:var(--text-secondary);">—</span>';
+            return `
+                <tr>
+                    <td><strong>${escapeHTML(p.name)}</strong></td>
+                    <td>${formatPrice(p.price)}</td>
+                    <td>${linked ? `<code style="background:rgba(46,125,50,0.1);padding:2px 6px;border-radius:4px;">${escapeHTML(mapping.supplierProductId)}</code>` : '<span style="color:var(--red);">Non lié</span>'}</td>
+                    <td>${linked ? formatPrice(mapping.supplierPrice) : '—'}</td>
+                    <td>${marginDisplay}</td>
+                    <td class="admin-actions-cell">
+                        <button class="btn-icon btn-edit btn-link-supplier" data-id="${p.id}" title="${linked ? 'Modifier la liaison' : 'Lier au fournisseur'}">🔗</button>
+                        ${linked ? `<button class="btn-icon btn-delete btn-unlink-supplier" data-id="${p.id}" title="Supprimer la liaison">✂️</button>` : ''}
+                    </td>
+                </tr>`;
+        }).join('');
+
+        mappingsBody.querySelectorAll('.btn-link-supplier').forEach(btn => {
+            btn.addEventListener('click', () => openSupplierModal(parseInt(btn.dataset.id)));
+        });
+        mappingsBody.querySelectorAll('.btn-unlink-supplier').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (confirm('Supprimer la liaison fournisseur pour ce produit ?')) {
+                    Supplier.removeMapping(parseInt(btn.dataset.id));
+                    refreshSupplierPage();
+                }
+            });
+        });
+    }
+
+    function openSupplierModal(productId) {
+        const p = products.find(x => x.id === productId);
+        if (!p) return;
+        const mapping = Supplier.getMapping(productId);
+
+        document.getElementById('supplier-edit-product-id').value = productId;
+        document.getElementById('supplier-edit-product-name').value = p.name;
+        document.getElementById('supplier-edit-id').value = mapping ? mapping.supplierProductId : '';
+        document.getElementById('supplier-edit-url').value = mapping ? mapping.supplierProductUrl : '';
+        document.getElementById('supplier-edit-sku').value = mapping ? mapping.supplierSku : '';
+        document.getElementById('supplier-edit-price').value = mapping ? mapping.supplierPrice : '';
+
+        supplierModal.style.display = 'flex';
+    }
+
+    function closeSupplierModal() { supplierModal.style.display = 'none'; }
+
+    supplierForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const productId = parseInt(document.getElementById('supplier-edit-product-id').value);
+        Supplier.setMapping(productId, {
+            supplierProductId: document.getElementById('supplier-edit-id').value.trim(),
+            supplierProductUrl: document.getElementById('supplier-edit-url').value.trim(),
+            supplierSku: document.getElementById('supplier-edit-sku').value.trim(),
+            supplierPrice: document.getElementById('supplier-edit-price').value
+        });
+        closeSupplierModal();
+        refreshSupplierPage();
+    });
+
+    document.getElementById('supplier-modal-close').addEventListener('click', closeSupplierModal);
+    document.getElementById('supplier-modal-cancel').addEventListener('click', closeSupplierModal);
+    supplierModal.addEventListener('click', (e) => { if (e.target === supplierModal) closeSupplierModal(); });
+
+    function supplierStatusLabel(status) {
+        const labels = {
+            processing: 'En traitement',
+            shipped: 'Expédié',
+            in_transit: 'En transit',
+            delivered: 'Livré',
+            cancelled: 'Annulé'
+        };
+        return labels[status] || status;
+    }
+
+    function renderSupplierOrders() {
+        if (typeof Supplier === 'undefined') return;
+        const orders = Supplier.getSupplierOrders();
+        const ordersBody = document.getElementById('supplier-orders-body');
+        const emptyEl = document.getElementById('supplier-orders-empty');
+
+        if (orders.length === 0) {
+            ordersBody.innerHTML = '';
+            emptyEl.style.display = 'block';
+            return;
+        }
+
+        emptyEl.style.display = 'none';
+        ordersBody.innerHTML = orders.slice().reverse().map(o => `
+            <tr>
+                <td><strong>${escapeHTML(o.orderId)}</strong></td>
+                <td><code style="background:rgba(46,125,50,0.1);padding:2px 6px;border-radius:4px;">${escapeHTML(o.supplierOrderId)}</code></td>
+                <td>${formatPrice(o.totalCost || 0)}</td>
+                <td><span style="color:var(--green);font-weight:600;">${formatPrice(o.profit || 0)}</span></td>
+                <td>${o.trackingNumber ? `<code>${escapeHTML(o.trackingNumber)}</code>` : '—'}</td>
+                <td>
+                    <select class="form-input supplier-status-select" data-order-id="${o.orderId}" style="padding:4px 8px;width:auto;font-size:0.8rem;">
+                        <option value="processing" ${o.status === 'processing' ? 'selected' : ''}>En traitement</option>
+                        <option value="shipped" ${o.status === 'shipped' ? 'selected' : ''}>Expédié</option>
+                        <option value="in_transit" ${o.status === 'in_transit' ? 'selected' : ''}>En transit</option>
+                        <option value="delivered" ${o.status === 'delivered' ? 'selected' : ''}>Livré</option>
+                        <option value="cancelled" ${o.status === 'cancelled' ? 'selected' : ''}>Annulé</option>
+                    </select>
+                </td>
+                <td>
+                    <button class="btn-icon btn-view-supplier-order" data-order-id="${o.orderId}" title="Voir">👁</button>
+                </td>
+            </tr>
+        `).join('');
+
+        ordersBody.querySelectorAll('.supplier-status-select').forEach(select => {
+            select.addEventListener('change', () => {
+                Supplier.updateSupplierOrderStatus(select.dataset.orderId, select.value);
+                renderSupplierStats();
+            });
+        });
+
+        ordersBody.querySelectorAll('.btn-view-supplier-order').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const order = Supplier.getSupplierOrder(btn.dataset.orderId);
+                if (order) showSupplierOrderDetail(order);
+            });
+        });
+    }
+
+    function showSupplierOrderDetail(order) {
+        document.getElementById('supplier-order-modal-title').textContent = 'Commande fournisseur — ' + order.supplierOrderId;
+        const body = document.getElementById('supplier-order-modal-body');
+
+        const items = (order.items || []).map(item => {
+            return `<tr>
+                <td><code>${escapeHTML(item.supplierProductId)}</code></td>
+                <td>${escapeHTML(item.supplierSku || '—')}</td>
+                <td>x${item.quantity}</td>
+                <td>${formatPrice(item.unitCost)}</td>
+                <td>${formatPrice(item.totalCost)}</td>
+            </tr>`;
+        }).join('');
+
+        const events = (order.events || []).map(ev => `
+            <div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);">
+                <span style="color:var(--text-secondary);font-size:0.8rem;white-space:nowrap;">${new Date(ev.date).toLocaleString('fr-FR')}</span>
+                <span><strong>${supplierStatusLabel(ev.status)}</strong> — ${escapeHTML(ev.description)}</span>
+            </div>
+        `).join('');
+
+        body.innerHTML = `
+            <p><strong>Commande site :</strong> ${escapeHTML(order.orderId)}</p>
+            <p><strong>ID Fournisseur :</strong> <code>${escapeHTML(order.supplierOrderId)}</code></p>
+            <p><strong>Plateforme :</strong> AliExpress</p>
+            <p><strong>Statut :</strong> <span class="status-badge status-${order.status === 'in_transit' ? 'shipped' : order.status}">${supplierStatusLabel(order.status)}</span></p>
+            <p><strong>N° Tracking :</strong> ${order.trackingNumber ? `<code>${escapeHTML(order.trackingNumber)}</code>` : 'Non disponible'}</p>
+            <p><strong>Livraison estimée :</strong> ${order.estimatedDelivery ? new Date(order.estimatedDelivery).toLocaleDateString('fr-FR') : '—'}</p>
+            <hr style="border-color:var(--border);margin:16px 0;">
+            <h3 style="margin-bottom:12px;">Articles commandés</h3>
+            <table class="admin-table">
+                <thead><tr><th>ID Produit</th><th>SKU</th><th>Qté</th><th>Prix unitaire</th><th>Total</th></tr></thead>
+                <tbody>${items}</tbody>
+            </table>
+            <div style="display:flex;justify-content:space-between;margin-top:16px;font-size:1.05rem;">
+                <span><strong>Coût total :</strong> ${formatPrice(order.totalCost || 0)}</span>
+                <span style="color:var(--green);"><strong>Marge :</strong> ${formatPrice(order.profit || 0)}</span>
+            </div>
+            <hr style="border-color:var(--border);margin:16px 0;">
+            <h3 style="margin-bottom:12px;">Historique</h3>
+            ${events || '<p class="text-secondary">Aucun événement.</p>'}
+        `;
+        supplierOrderModal.style.display = 'flex';
+    }
+
+    document.getElementById('supplier-order-modal-close').addEventListener('click', () => { supplierOrderModal.style.display = 'none'; });
+    supplierOrderModal.addEventListener('click', (e) => { if (e.target === supplierOrderModal) supplierOrderModal.style.display = 'none'; });
+
+    // Configuration fournisseur
+    function loadSupplierConfig() {
+        if (typeof Supplier === 'undefined') return;
+        const config = Supplier.getConfig();
+        document.getElementById('supplier-platform').value = config.platform || 'aliexpress';
+        document.getElementById('supplier-mode').value = config.apiMode || 'simulation';
+        document.getElementById('supplier-auto-forward').checked = config.autoForward !== false;
+        document.getElementById('supplier-api-key').value = config.apiKey || '';
+        document.getElementById('supplier-api-secret').value = config.apiSecret || '';
+        toggleApiFields(config.apiMode);
+    }
+
+    function toggleApiFields(mode) {
+        const show = mode === 'live';
+        document.getElementById('api-key-group').style.display = show ? 'block' : 'none';
+        document.getElementById('api-secret-group').style.display = show ? 'block' : 'none';
+    }
+
+    document.getElementById('supplier-mode').addEventListener('change', (e) => {
+        toggleApiFields(e.target.value);
+    });
+
+    document.getElementById('save-supplier-config-btn').addEventListener('click', () => {
+        Supplier.saveConfig({
+            platform: document.getElementById('supplier-platform').value,
+            apiMode: document.getElementById('supplier-mode').value,
+            autoForward: document.getElementById('supplier-auto-forward').checked,
+            apiKey: document.getElementById('supplier-api-key').value.trim(),
+            apiSecret: document.getElementById('supplier-api-secret').value.trim(),
+            trackingEnabled: true
+        });
+        alert('Configuration fournisseur enregistrée.');
     });
 
     // ===== ESCAPE HTML =====
