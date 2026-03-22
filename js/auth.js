@@ -83,12 +83,19 @@ const Auth = (() => {
                 saveSession(profile);
                 return { ok: true, user: profile };
             } catch (e) {
-                const messages = {
-                    'auth/email-already-in-use': 'Un compte avec cet email existe deja.',
-                    'auth/weak-password': 'Le mot de passe doit contenir au moins 6 caracteres.',
-                    'auth/invalid-email': 'Adresse email invalide.'
-                };
-                return { ok: false, error: messages[e.code] || e.message };
+                // Si erreur réseau/Firebase indisponible, fallback vers localStorage
+                const networkErrors = ['auth/network-request-failed', 'auth/internal-error'];
+                if (networkErrors.includes(e.code) || !e.code) {
+                    console.warn('Firebase Auth indisponible, fallback localStorage:', e.message);
+                    // Continue vers le fallback localStorage ci-dessous
+                } else {
+                    const messages = {
+                        'auth/email-already-in-use': 'Un compte avec cet email existe deja.',
+                        'auth/weak-password': 'Le mot de passe doit contenir au moins 6 caracteres.',
+                        'auth/invalid-email': 'Adresse email invalide.'
+                    };
+                    return { ok: false, error: messages[e.code] || e.message };
+                }
             }
         }
 
@@ -150,14 +157,20 @@ const Auth = (() => {
                 saveSession(profile);
                 return { ok: true, user: profile };
             } catch (e) {
-                const messages = {
-                    'auth/user-not-found': 'Email ou mot de passe incorrect.',
-                    'auth/wrong-password': 'Email ou mot de passe incorrect.',
-                    'auth/invalid-credential': 'Email ou mot de passe incorrect.',
-                    'auth/invalid-email': 'Adresse email invalide.',
-                    'auth/too-many-requests': 'Trop de tentatives. Reessayez plus tard.'
-                };
-                return { ok: false, error: messages[e.code] || 'Email ou mot de passe incorrect.' };
+                // Si erreur réseau/Firebase indisponible, fallback vers localStorage
+                const networkErrors = ['auth/network-request-failed', 'auth/internal-error', 'auth/too-many-requests'];
+                if (networkErrors.includes(e.code) || !e.code) {
+                    console.warn('Firebase Auth indisponible, fallback localStorage:', e.message);
+                    // Continue vers le fallback localStorage ci-dessous
+                } else {
+                    const messages = {
+                        'auth/user-not-found': 'Email ou mot de passe incorrect.',
+                        'auth/wrong-password': 'Email ou mot de passe incorrect.',
+                        'auth/invalid-credential': 'Email ou mot de passe incorrect.',
+                        'auth/invalid-email': 'Adresse email invalide.'
+                    };
+                    return { ok: false, error: messages[e.code] || 'Email ou mot de passe incorrect.' };
+                }
             }
         }
 
