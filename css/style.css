@@ -1,28 +1,29 @@
 /* ============================
-   SkynetStore — Bleu Argile Theme 2026
+   SkynetStore — Dark Smoke Theme (Blue/Purple/Pink + Orange Text)
    ============================ */
 
 :root {
-    --bg-primary: #e8ecf0;
-    --bg-secondary: #dce2e8;
-    --bg-card: rgba(255, 255, 255, 0.9);
-    --bg-card-hover: rgba(240, 244, 248, 0.94);
+    --bg-primary: #0a0a14;
+    --bg-secondary: #12121f;
+    --bg-card: rgba(18, 18, 35, 0.85);
+    --bg-card-hover: rgba(25, 25, 50, 0.92);
     --accent: #ff6b00;
     --accent-light: #ff8c33;
-    --accent-glow: rgba(255, 107, 0, 0.2);
-    --cyan: #4a7c8a;
-    --green: #2e7d32;
+    --accent-glow: rgba(255, 107, 0, 0.25);
+    --cyan: #66bbff;
+    --green: #4ade80;
     --pink: #e91e63;
-    --text-primary: #2c3e50;
-    --text-secondary: #4a5568;
-    --text-muted: #718096;
-    --border: rgba(107, 123, 141, 0.18);
-    --border-light: rgba(107, 123, 141, 0.28);
+    --purple: #8855dd;
+    --text-primary: #ff6b00;
+    --text-secondary: #ff9a44;
+    --text-muted: #cc7a33;
+    --border: rgba(100, 120, 255, 0.12);
+    --border-light: rgba(100, 120, 255, 0.22);
     --radius: 12px;
     --radius-sm: 8px;
     --radius-lg: 20px;
-    --shadow: 0 4px 24px rgba(44, 62, 80, 0.08);
-    --shadow-glow: 0 0 30px rgba(255, 107, 0, 0.2);
+    --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    --shadow-glow: 0 0 30px rgba(255, 107, 0, 0.3);
     --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
@@ -41,17 +42,38 @@ html {
 
 body {
     font-family: var(--font);
-    background-color: #d5dce3;
+    background-color: #050510;
     background-image:
-        radial-gradient(ellipse at 10% 5%, rgba(255, 255, 255, 0.6) 0%, transparent 50%),
-        radial-gradient(ellipse at 85% 15%, rgba(107, 123, 141, 0.12) 0%, transparent 45%),
-        radial-gradient(ellipse at 50% 70%, rgba(255, 255, 255, 0.35) 0%, transparent 50%),
-        radial-gradient(ellipse at 95% 90%, rgba(107, 123, 141, 0.08) 0%, transparent 40%),
-        linear-gradient(160deg, #e8ecf0 0%, #c9d3dc 30%, #d5dce3 50%, #bcc8d1 75%, #e4e9ee 100%);
+        radial-gradient(ellipse at 15% 50%, rgba(88, 50, 200, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 40%, rgba(50, 100, 255, 0.2) 0%, transparent 45%),
+        radial-gradient(ellipse at 75% 50%, rgba(100, 180, 255, 0.15) 0%, transparent 40%),
+        radial-gradient(ellipse at 90% 50%, rgba(200, 100, 180, 0.2) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 80%, rgba(60, 60, 180, 0.1) 0%, transparent 50%),
+        linear-gradient(180deg, #0a0a18 0%, #050515 50%, #080820 100%);
     background-attachment: fixed;
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse 80% 50% at 30% 45%, rgba(70, 70, 220, 0.08) 0%, transparent 100%),
+        radial-gradient(ellipse 60% 40% at 70% 55%, rgba(180, 80, 160, 0.06) 0%, transparent 100%);
+    animation: smokeShift 12s ease-in-out infinite alternate;
+}
+
+@keyframes smokeShift {
+    0% { opacity: 0.6; transform: scale(1) translateX(0); }
+    100% { opacity: 1; transform: scale(1.05) translateX(-2%); }
 }
 
 a {
@@ -84,7 +106,7 @@ img {
     left: 0;
     right: 0;
     z-index: 1000;
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(10, 10, 20, 0.85);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
     transition: background var(--transition);
@@ -267,8 +289,8 @@ img {
     position: absolute;
     inset: 0;
     background-image:
-        linear-gradient(rgba(107, 123, 141, 0.07) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(107, 123, 141, 0.07) 1px, transparent 1px);
+        linear-gradient(rgba(80, 80, 200, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(80, 80, 200, 0.08) 1px, transparent 1px);
     background-size: 60px 60px;
     mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent);
 }
@@ -314,7 +336,7 @@ img {
 }
 
 .gradient-text {
-    background: linear-gradient(135deg, #ff6b00, #ff9a44);
+    background: linear-gradient(135deg, #ff6b00, #ff9a44, #ff6b00);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -363,7 +385,7 @@ img {
    Produit du Moment (Highlight)
    ============================ */
 .product-highlight {
-    background: linear-gradient(180deg, rgba(107, 123, 141, 0.06), transparent);
+    background: linear-gradient(180deg, rgba(80, 60, 200, 0.06), transparent);
 }
 
 .highlight-card {
@@ -523,7 +545,7 @@ img {
 .page-hero {
     padding: 120px 0 40px;
     text-align: center;
-    background: linear-gradient(180deg, rgba(107, 123, 141, 0.08), transparent);
+    background: linear-gradient(180deg, rgba(60, 60, 180, 0.08), transparent);
 }
 
 .page-title {
@@ -1039,7 +1061,7 @@ img {
    Newsletter
    ============================ */
 .newsletter-inner {
-    background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(213,220,227,0.8));
+    background: linear-gradient(135deg, rgba(18, 18, 40, 0.9), rgba(25, 20, 50, 0.85));
     backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
@@ -1144,7 +1166,7 @@ img {
    Footer
    ============================ */
 .footer {
-    background: linear-gradient(180deg, #d5dce3, #ffffff);
+    background: linear-gradient(180deg, #0a0a18, #050510);
     border-top: 1px solid var(--border);
     padding: 60px 0 0;
 }
@@ -1194,8 +1216,8 @@ img {
 .cart-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(6px);
     z-index: 2000;
     opacity: 0;
     pointer-events: none;
@@ -1214,9 +1236,9 @@ img {
     width: 400px;
     max-width: 90vw;
     height: 100vh;
-    background: #ffffff;
+    background: #0d0d1a;
     border-left: 1px solid var(--border);
-    box-shadow: -4px 0 30px rgba(0, 0, 0, 0.08);
+    box-shadow: -4px 0 30px rgba(0, 0, 0, 0.5);
     z-index: 2001;
     display: flex;
     flex-direction: column;
@@ -1581,8 +1603,8 @@ img {
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
     z-index: 3000;
     display: flex;
     align-items: center;
@@ -1591,14 +1613,14 @@ img {
 }
 
 .modal {
-    background: #ffffff;
+    background: #0d0d1a;
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 48px;
     text-align: center;
     max-width: 480px;
     width: 100%;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
 }
 
 .modal-icon {
@@ -1638,7 +1660,7 @@ img {
         top: 70px;
         left: 0;
         right: 0;
-        background: rgba(255, 255, 255, 0.95);
+        background: rgba(10, 10, 20, 0.95);
         backdrop-filter: blur(12px);
         flex-direction: column;
         padding: 20px;
@@ -1910,15 +1932,15 @@ img {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    background: #fff;
-    color: #333;
-    border: 1px solid #ddd;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ccc;
+    border: 1px solid rgba(255, 255, 255, 0.15);
     font-weight: 500;
     transition: background 0.2s, box-shadow 0.2s;
 }
 .btn-google:hover {
-    background: #f5f5f5;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 .btn-google svg {
     flex-shrink: 0;
@@ -2027,7 +2049,7 @@ img {
 .admin-badge {
     display: inline-block;
     padding: 4px 10px;
-    background: rgba(0, 212, 255, 0.1);
+    background: rgba(100, 180, 255, 0.12);
     color: var(--cyan);
     border-radius: 50px;
     font-size: 0.75rem;
