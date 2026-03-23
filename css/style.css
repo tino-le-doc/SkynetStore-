@@ -1,28 +1,28 @@
 /* ============================
-   SkynetStore — Light Green & White Theme
+   SkynetStore — Bleu Argile Theme 2026
    ============================ */
 
 :root {
-    --bg-primary: #e0e0e0;
-    --bg-secondary: #d0d0d8;
-    --bg-card: rgba(255, 255, 255, 0.88);
-    --bg-card-hover: rgba(240, 240, 245, 0.92);
+    --bg-primary: #e8ecf0;
+    --bg-secondary: #dce2e8;
+    --bg-card: rgba(255, 255, 255, 0.9);
+    --bg-card-hover: rgba(240, 244, 248, 0.94);
     --accent: #ff6b00;
     --accent-light: #ff8c33;
     --accent-glow: rgba(255, 107, 0, 0.2);
-    --cyan: #00897b;
+    --cyan: #4a7c8a;
     --green: #2e7d32;
     --pink: #e91e63;
-    --text-primary: #ff6b00;
-    --text-secondary: #e06000;
-    --text-muted: #cc7a33;
-    --border: rgba(160, 160, 180, 0.25);
-    --border-light: rgba(160, 160, 180, 0.35);
+    --text-primary: #2c3e50;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --border: rgba(107, 123, 141, 0.18);
+    --border-light: rgba(107, 123, 141, 0.28);
     --radius: 12px;
     --radius-sm: 8px;
     --radius-lg: 20px;
-    --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-    --shadow-glow: 0 0 30px rgba(255, 107, 0, 0.25);
+    --shadow: 0 4px 24px rgba(44, 62, 80, 0.08);
+    --shadow-glow: 0 0 30px rgba(255, 107, 0, 0.2);
     --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
@@ -41,48 +41,17 @@ html {
 
 body {
     font-family: var(--font);
-    background-color: #c8c8d0;
+    background-color: #d5dce3;
     background-image:
-        repeating-conic-gradient(
-            rgba(220, 220, 230, 0.6) 0% 25%,
-            rgba(190, 190, 205, 0.4) 25% 50%
-        ),
-        radial-gradient(ellipse at 15% 10%, rgba(255, 255, 255, 0.7) 0%, transparent 45%),
-        radial-gradient(ellipse at 85% 25%, rgba(210, 215, 225, 0.8) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 75%, rgba(230, 230, 240, 0.5) 0%, transparent 50%),
-        radial-gradient(ellipse at 90% 85%, rgba(255, 255, 255, 0.4) 0%, transparent 40%),
-        linear-gradient(160deg, #d8d8e0 0%, #c0c0cc 30%, #d0d0d8 50%, #b8b8c5 75%, #e0e0e8 100%);
-    background-size: 8px 8px, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+        radial-gradient(ellipse at 10% 5%, rgba(255, 255, 255, 0.6) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 15%, rgba(107, 123, 141, 0.12) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 70%, rgba(255, 255, 255, 0.35) 0%, transparent 50%),
+        radial-gradient(ellipse at 95% 90%, rgba(107, 123, 141, 0.08) 0%, transparent 40%),
+        linear-gradient(160deg, #e8ecf0 0%, #c9d3dc 30%, #d5dce3 50%, #bcc8d1 75%, #e4e9ee 100%);
     background-attachment: fixed;
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
-}
-
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    pointer-events: none;
-    background:
-        linear-gradient(135deg,
-            transparent 0%,
-            rgba(255, 255, 255, 0.15) 25%,
-            transparent 50%,
-            rgba(255, 255, 255, 0.1) 75%,
-            transparent 100%
-        );
-    background-size: 200% 200%;
-    animation: shimmer 8s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-    0%, 100% { background-position: 0% 0%; }
-    50% { background-position: 100% 100%; }
 }
 
 a {
@@ -298,8 +267,8 @@ img {
     position: absolute;
     inset: 0;
     background-image:
-        linear-gradient(rgba(160, 160, 180, 0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(160, 160, 180, 0.08) 1px, transparent 1px);
+        linear-gradient(rgba(107, 123, 141, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(107, 123, 141, 0.07) 1px, transparent 1px);
     background-size: 60px 60px;
     mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent);
 }
@@ -394,7 +363,7 @@ img {
    Produit du Moment (Highlight)
    ============================ */
 .product-highlight {
-    background: linear-gradient(180deg, rgba(180, 180, 200, 0.06), transparent);
+    background: linear-gradient(180deg, rgba(107, 123, 141, 0.06), transparent);
 }
 
 .highlight-card {
@@ -554,7 +523,7 @@ img {
 .page-hero {
     padding: 120px 0 40px;
     text-align: center;
-    background: linear-gradient(180deg, rgba(160, 160, 180, 0.08), transparent);
+    background: linear-gradient(180deg, rgba(107, 123, 141, 0.08), transparent);
 }
 
 .page-title {
@@ -1070,7 +1039,7 @@ img {
    Newsletter
    ============================ */
 .newsletter-inner {
-    background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(220,220,230,0.8));
+    background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(213,220,227,0.8));
     backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
@@ -1175,7 +1144,7 @@ img {
    Footer
    ============================ */
 .footer {
-    background: linear-gradient(180deg, #d8d8e0, #ffffff);
+    background: linear-gradient(180deg, #d5dce3, #ffffff);
     border-top: 1px solid var(--border);
     padding: 60px 0 0;
 }
