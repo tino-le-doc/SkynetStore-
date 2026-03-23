@@ -1,28 +1,28 @@
 /* ============================
-   SkynetStore — Blue & White Gradient + Orange Text
+   SkynetStore — Bleu Argile → Cloud Dancer + Orange Text
    ============================ */
 
 :root {
-    --bg-primary: #e8f0fc;
-    --bg-secondary: #dce8f8;
-    --bg-card: rgba(255, 255, 255, 0.88);
-    --bg-card-hover: rgba(255, 255, 255, 0.95);
+    --bg-primary: #8a9aaa;
+    --bg-secondary: #7d8d9d;
+    --bg-card: rgba(240, 237, 229, 0.82);
+    --bg-card-hover: rgba(245, 242, 236, 0.92);
     --accent: #ff6b00;
     --accent-light: #ff8c33;
-    --accent-glow: rgba(255, 107, 0, 0.2);
-    --cyan: #3388cc;
+    --accent-glow: rgba(255, 107, 0, 0.22);
+    --cyan: #4a7c8a;
     --green: #2e7d32;
     --pink: #e91e63;
     --purple: #6644aa;
     --text-primary: #ff6b00;
     --text-secondary: #e85d00;
     --text-muted: #cc7a33;
-    --border: rgba(30, 80, 180, 0.12);
-    --border-light: rgba(30, 80, 180, 0.22);
+    --border: rgba(107, 123, 141, 0.2);
+    --border-light: rgba(107, 123, 141, 0.3);
     --radius: 12px;
     --radius-sm: 8px;
     --radius-lg: 20px;
-    --shadow: 0 4px 24px rgba(30, 60, 120, 0.1);
+    --shadow: 0 4px 24px rgba(107, 123, 141, 0.15);
     --shadow-glow: 0 0 30px rgba(255, 107, 0, 0.25);
     --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -42,13 +42,13 @@ html {
 
 body {
     font-family: var(--font);
-    background-color: #dce8f8;
+    background-color: #6B7B8D;
     background-image:
-        radial-gradient(ellipse at 10% 10%, rgba(255, 255, 255, 0.8) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 20%, rgba(30, 100, 220, 0.15) 0%, transparent 45%),
-        radial-gradient(ellipse at 50% 60%, rgba(255, 255, 255, 0.5) 0%, transparent 50%),
-        radial-gradient(ellipse at 90% 80%, rgba(50, 120, 220, 0.1) 0%, transparent 40%),
-        linear-gradient(160deg, #ffffff 0%, #d0e0f5 25%, #e4eefa 50%, #c5d8f0 75%, #f0f5ff 100%);
+        radial-gradient(ellipse at 15% 10%, rgba(240, 237, 229, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 20%, rgba(107, 123, 141, 0.3) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 50%, rgba(240, 237, 229, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 85%, rgba(240, 237, 229, 0.2) 0%, transparent 40%),
+        linear-gradient(160deg, #6B7B8D 0%, #7d8d9d 20%, #a0abb6 40%, #c8c4bc 60%, #e0ddd6 80%, #F0EDE5 100%);
     background-attachment: fixed;
     color: var(--text-primary);
     line-height: 1.6;
@@ -85,7 +85,7 @@ img {
     left: 0;
     right: 0;
     z-index: 1000;
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(240, 237, 229, 0.8);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
     transition: background var(--transition);
@@ -280,8 +280,8 @@ img {
     position: absolute;
     inset: 0;
     background-image:
-        linear-gradient(rgba(30, 80, 180, 0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(30, 80, 180, 0.06) 1px, transparent 1px);
+        linear-gradient(rgba(107, 123, 141, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(107, 123, 141, 0.08) 1px, transparent 1px);
     background-size: 60px 60px;
     mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent);
 }
@@ -376,7 +376,7 @@ img {
    Produit du Moment (Highlight)
    ============================ */
 .product-highlight {
-    background: linear-gradient(180deg, rgba(30, 80, 180, 0.06), transparent);
+    background: linear-gradient(180deg, rgba(107, 123, 141, 0.08), transparent);
 }
 
 .highlight-card {
@@ -536,7 +536,7 @@ img {
 .page-hero {
     padding: 120px 0 40px;
     text-align: center;
-    background: linear-gradient(180deg, rgba(30, 80, 180, 0.08), transparent);
+    background: linear-gradient(180deg, rgba(107, 123, 141, 0.06), transparent);
 }
 
 .page-title {
@@ -1052,7 +1052,7 @@ img {
    Newsletter
    ============================ */
 .newsletter-inner {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(210, 225, 245, 0.85));
+    background: linear-gradient(135deg, rgba(240, 237, 229, 0.88), rgba(220, 216, 208, 0.82));
     backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
@@ -1157,7 +1157,7 @@ img {
    Footer
    ============================ */
 .footer {
-    background: linear-gradient(180deg, #d0e0f5, #ffffff);
+    background: linear-gradient(180deg, #d8d4cc, #F0EDE5);
     border-top: 1px solid var(--border);
     padding: 60px 0 0;
 }
@@ -1651,7 +1651,7 @@ img {
         top: 70px;
         left: 0;
         right: 0;
-        background: rgba(255, 255, 255, 0.95);
+        background: rgba(240, 237, 229, 0.95);
         backdrop-filter: blur(12px);
         flex-direction: column;
         padding: 20px;
