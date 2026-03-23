@@ -103,13 +103,25 @@ img {
     font-weight: 800;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     letter-spacing: -0.5px;
 }
 
 .logo-icon {
-    color: var(--accent);
-    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+}
+
+.logo-icon svg {
+    width: 38px;
+    height: 38px;
+    filter: drop-shadow(0 0 6px rgba(255, 107, 0, 0.4));
+    transition: filter var(--transition), transform var(--transition);
+}
+
+.logo:hover .logo-icon svg {
+    filter: drop-shadow(0 0 12px rgba(255, 107, 0, 0.6));
+    transform: rotate(15deg) scale(1.08);
 }
 
 .nav {
