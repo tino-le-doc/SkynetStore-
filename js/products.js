@@ -15,7 +15,7 @@ const DEFAULT_PRODUCTS = [
         rating: 4.8,
         reviews: 342,
         emoji: "🔊",
-        image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&h=400&fit=crop",
+        image: "https://images.unsplash.com/photo-1543512214-318228f8e9c8?w=400&h=400&fit=crop&q=80",
         description: "Enceinte IA de nouvelle génération avec assistant vocal avancé, son surround 360° et reconnaissance vocale multi-utilisateurs. Contrôlez votre maison connectée d'une simple commande.",
         features: [
             "Assistant IA avec compréhension contextuelle",
@@ -38,7 +38,7 @@ const DEFAULT_PRODUCTS = [
         rating: 4.6,
         reviews: 128,
         emoji: "👓",
-        image: "https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?w=400&h=400&fit=crop",
+        image: "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=400&h=400&fit=crop&q=80",
         description: "Lunettes AR légères avec IA intégrée. Traduction en temps réel, navigation holographique, assistant visuel et affichage tête haute. Le futur se porte sur le nez.",
         features: [
             "Affichage AR haute résolution",
@@ -61,7 +61,7 @@ const DEFAULT_PRODUCTS = [
         rating: 4.7,
         reviews: 589,
         emoji: "📷",
-        image: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=400&h=400&fit=crop",
+        image: "https://images.unsplash.com/photo-1558002038-1055907df827?w=400&h=400&fit=crop&q=80",
         description: "Caméra de surveillance IA avec détection de personnes, animaux et véhicules. Vision nocturne couleur, audio bidirectionnel et alertes intelligentes sur votre smartphone.",
         features: [
             "Détection IA : personnes, animaux, véhicules",
@@ -84,7 +84,7 @@ const DEFAULT_PRODUCTS = [
         rating: 4.9,
         reviews: 256,
         emoji: "🤖",
-        image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&h=400&fit=crop",
+        image: "https://images.unsplash.com/photo-1546776310-eef45dd6d63c?w=400&h=400&fit=crop&q=80",
         description: "Petit robot compagnon doté d'une IA émotionnelle. Il apprend vos habitudes, répond à vos émotions et peut contrôler votre maison connectée. Le meilleur ami des technophiles.",
         features: [
             "IA émotionnelle avec apprentissage adaptatif",
@@ -107,7 +107,7 @@ const DEFAULT_PRODUCTS = [
         rating: 4.7,
         reviews: 723,
         emoji: "🎧",
-        image: "https://images.unsplash.com/photo-1590658268037-6bf12f032f55?w=400&h=400&fit=crop",
+        image: "https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=400&h=400&fit=crop&q=80",
         description: "Écouteurs sans fil avec ANC adaptatif piloté par IA, son spatial et traduction simultanée. L'audio du futur, directement dans vos oreilles.",
         features: [
             "ANC adaptatif avec IA environnementale",
@@ -130,7 +130,7 @@ const DEFAULT_PRODUCTS = [
         rating: 4.5,
         reviews: 412,
         emoji: "🌐",
-        image: "https://images.unsplash.com/photo-1589492477829-5e65395b66cc?w=400&h=400&fit=crop",
+        image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=400&fit=crop&q=80",
         description: "Traducteur vocal IA de poche qui traduit instantanément 100+ langues. Compact, rapide et précis — votre passeport linguistique universel.",
         features: [
             "Traduction instantanée 100+ langues",
@@ -153,7 +153,7 @@ const DEFAULT_PRODUCTS = [
         rating: 4.8,
         reviews: 178,
         emoji: "🚁",
-        image: "https://images.unsplash.com/photo-1507582020474-9a35b7d455d9?w=400&h=400&fit=crop",
+        image: "https://images.unsplash.com/photo-1508614589041-895b88991e3e?w=400&h=400&fit=crop&q=80",
         description: "Drone autonome avec pilotage IA, évitement d'obstacles 360° et caméra 4K stabilisée. Suivi automatique de sujets et modes cinématiques pré-programmés.",
         features: [
             "Pilotage autonome par IA",
@@ -176,7 +176,7 @@ const DEFAULT_PRODUCTS = [
         rating: 4.6,
         reviews: 634,
         emoji: "⌚",
-        image: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=400&h=400&fit=crop",
+        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop&q=80",
         description: "Montre connectée avec suivi santé propulsé par IA. ECG, SpO2, analyse du sommeil et coaching sportif personnalisé. Votre coach santé au poignet.",
         features: [
             "ECG et SpO2 avec analyse IA",
@@ -199,7 +199,7 @@ const DEFAULT_PRODUCTS = [
         rating: 4.4,
         reviews: 891,
         emoji: "💡",
-        image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=400&fit=crop",
+        image: "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?w=400&h=400&fit=crop&q=80",
         description: "Ampoule connectée qui s'adapte à votre humeur grâce à l'IA. 16 millions de couleurs, scènes automatiques et intégration domotique complète.",
         features: [
             "16 millions de couleurs RGB+W",
@@ -222,7 +222,7 @@ const DEFAULT_PRODUCTS = [
         rating: 4.5,
         reviews: 267,
         emoji: "⌨️",
-        image: "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=400&h=400&fit=crop",
+        image: "https://images.unsplash.com/photo-1595225476474-87563907a212?w=400&h=400&fit=crop&q=80",
         description: "Clavier mécanique sans fil avec IA prédictive intégrée. Auto-complétion intelligente, correction contextuelle et macros adaptatifs pour coder plus vite.",
         features: [
             "IA prédictive avec auto-complétion",
@@ -245,7 +245,7 @@ const DEFAULT_PRODUCTS = [
         rating: 4.7,
         reviews: 195,
         emoji: "🎵",
-        image: "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=400&h=400&fit=crop",
+        image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&h=400&fit=crop&q=80",
         description: "Enceinte multi-room premium avec IA musicale. Calibration acoustique automatique, recommandations musicales personnalisées et audio haute résolution.",
         features: [
             "Calibration acoustique IA automatique",
@@ -268,7 +268,7 @@ const DEFAULT_PRODUCTS = [
         rating: 4.3,
         reviews: 143,
         emoji: "📱",
-        image: "https://images.unsplash.com/photo-1633526543814-9718c8922b7a?w=400&h=400&fit=crop",
+        image: "https://images.unsplash.com/photo-1617802690992-15d93263d3a9?w=400&h=400&fit=crop&q=80",
         description: "Scanner 3D portable qui utilise l'IA pour numériser des objets en haute fidélité. Parfait pour l'impression 3D, la modélisation et le e-commerce.",
         features: [
             "Scan 3D haute fidélité par IA",
